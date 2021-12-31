@@ -1,4 +1,5 @@
-from npuzzle.npuzzle import Npuzzle, Move
+from npuzzle.npuzzle import Move, Npuzzle
+
 
 def test_make_move(n: int) -> None:
     """Test Npuzzle.make_move"""
@@ -12,7 +13,8 @@ def test_make_move(n: int) -> None:
         else:
             print("ERROR")
         move = int(input(">"))
-        res = puzzle.make_move(move)
+        res = puzzle.make_move(Move(move))
+
 
 def main() -> None:
     """Main function."""
