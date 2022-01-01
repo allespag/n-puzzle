@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import copy
+import random
 from enum import IntEnum, auto
-from random import shuffle
 from typing import Any
 
 EMPTY_TILE = 0
@@ -77,13 +78,17 @@ class Npuzzle:
     @staticmethod
     def from_random(n: int) -> Npuzzle:
         tiles = list(range(n * n))
-        shuffle(tiles)
+        random.shuffle(tiles)
 
         return Npuzzle(n, tiles)
 
     @property
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
+
+    @property
+    def goal(self) -> Npuzzle:
+        return Npuzzle(self.n, list(range(self.n * self.n)))
 
     def __str__(self) -> str:
         pattern = " {: <{digit}} |"
@@ -93,13 +98,13 @@ class Npuzzle:
 
     # note: I don't know if it's the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:
-        methods = [
+        moves = [
             Npuzzle.__make_up,
             Npuzzle.__make_right,
             Npuzzle.__make_down,
             Npuzzle.__make_left,
         ]
-        return methods[move](self)
+        return moves[move](self)
 
     def __make_up(self) -> bool:
         src = self.empty_tile
@@ -152,3 +157,14 @@ class Npuzzle:
         self.tiles[dst] = EMPTY_TILE
 
         return True
+
+    @property
+    def successors(self) -> list[Npuzzle]:
+        res: list[Npuzzle] = []
+        candidate = copy.deepcopy(self)
+        for move in Move:
+            success = candidate.make_move(move)
+            if success:
+                res.append(candidate)
+                candidate = copy.deepcopy(self)
+        return res
