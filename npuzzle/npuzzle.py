@@ -21,6 +21,19 @@ def coor_in_list(coor: tuple[int, int], shape: tuple[int, int]) -> bool:
     return 0 <= x < max_x and 0 <= y < max_y
 
 
+def index_to_coor(index: int, shape: tuple[int, int]) -> tuple[int, int]:
+    width, _ = shape
+
+    return (index % width, index // width)
+
+
+def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
+    x, y = coor
+    width, _ = shape
+
+    return y * width + x
+
+
 class Move(IntEnum):
     UP = 0
     RIGHT = auto()
@@ -82,6 +95,20 @@ class Npuzzle:
 
         return Npuzzle(n, tiles)
 
+    def __str__(self) -> str:
+        pattern = " {: <{digit}} |"
+        max_digit = len(str(max(self.tiles)))
+        res = "\n".join(pattern * self.n for _ in range(self.n))
+        return res.format(*self.tiles, digit=max_digit)
+
+    def __eq__(self, other: Npuzzle) -> bool:
+        a = self.tiles.copy()
+        b = other.tiles.copy()
+        a.remove(EMPTY_TILE)
+        b.remove(EMPTY_TILE)
+
+        return a == b
+
     @property
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
@@ -89,12 +116,6 @@ class Npuzzle:
     @property
     def goal(self) -> Npuzzle:
         return Npuzzle(self.n, list(range(self.n * self.n)))
-
-    def __str__(self) -> str:
-        pattern = " {: <{digit}} |"
-        max_digit = len(str(max(self.tiles)))
-        res = "\n".join(pattern * self.n for _ in range(self.n))
-        return res.format(*self.tiles, digit=max_digit)
 
     # note: I don't know if it's the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:
