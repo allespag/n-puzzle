@@ -59,6 +59,8 @@ def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
 
 Peut être qu'il faut les déplacer dans un fichier `utils.py` ?
 
+**UPDATE**: C'est fait.
+
 * J'ai écris 2 fonctions pour pouvoir convertir un index vers des coordonnées et inversement mais je ne les utilise pas dans les méthodes `__make_[UP|RIGHT|DOWN|LEFT]`.
 
 ```python
@@ -130,6 +132,10 @@ class Npuzzle:
 ```
 
 **NOTE**: je ne suis pas sûr qu'elles sont utiles pour `__make_up` et `__make_down`.
+
+* Tester `Npuzzle.from_file`. Il y a quelques tests dans `resources/puzzles/tests` mais je manque peut être des choses.
+
+* Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
 
 ## solver.py
 
