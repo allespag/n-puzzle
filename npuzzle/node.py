@@ -3,7 +3,6 @@ from __future__ import annotations
 from npuzzle.npuzzle import Npuzzle
 
 
-# note: dataclass ? __lt__ ?
 class Node:
     def __init__(self, state: Npuzzle) -> None:
         self.state = state
@@ -11,6 +10,9 @@ class Node:
         self.g = 0  # distance between the current node and the start node
         self.h = 0  # estimated distance from the current node to the end node
         self.parent: Node | None = None
+
+    def __repr__(self) -> str:
+        return f"Node({self.state!r}, f={self.f}, g={self.g}, h={self.h}, {self.parent}, @{hex(id(self))})"
 
     def __lt__(self, other: Node) -> bool:
         return self.f < other.f

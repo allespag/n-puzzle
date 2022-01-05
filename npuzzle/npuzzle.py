@@ -3,35 +3,12 @@ from __future__ import annotations
 import copy
 import random
 from enum import IntEnum, auto
-from typing import Any
+
+from npuzzle.utils import coor_in_list, index_in_list
 
 EMPTY_TILE = 0
 MIN_N_VALUE = 2
 MAX_N_VALUE = 10
-
-
-def index_in_list(index: int, list: list[Any]) -> bool:
-    return 0 <= index < len(list)
-
-
-def coor_in_list(coor: tuple[int, int], shape: tuple[int, int]) -> bool:
-    max_x, max_y = shape
-    x, y = coor
-
-    return 0 <= x < max_x and 0 <= y < max_y
-
-
-def index_to_coor(index: int, shape: tuple[int, int]) -> tuple[int, int]:
-    width, _ = shape
-
-    return (index % width, index // width)
-
-
-def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
-    x, y = coor
-    width, _ = shape
-
-    return y * width + x
 
 
 class Move(IntEnum):
@@ -86,7 +63,22 @@ class Npuzzle:
 
     @staticmethod
     def from_file(path: str) -> Npuzzle:
-        pass
+        n = -1
+        tiles: list[int] = []
+        with open(path) as f:
+            for line in f.readlines():
+                line = line.split("#")[0]
+                line = line.split(" ")
+                line = [elem.replace("\n", "") for elem in line]
+                line = list(filter(lambda x: x.isnumeric(), line))
+                if not line:
+                    continue
+                line = [int(elem) for elem in line]
+                if len(line) == 1:
+                    n = line[0]
+                else:
+                    tiles += line
+        return Npuzzle(n, tiles)
 
     @staticmethod
     def from_random(n: int) -> Npuzzle:
@@ -94,6 +86,9 @@ class Npuzzle:
         random.shuffle(tiles)
 
         return Npuzzle(n, tiles)
+
+    def __repr__(self) -> str:
+        return f"Npuzzle({self.tiles}, n={self.n}, @{hex(id(self))})"
 
     def __str__(self) -> str:
         pattern = " {: <{digit}} |"
@@ -113,9 +108,11 @@ class Npuzzle:
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
 
+    # WRONG
     @property
     def goal(self) -> Npuzzle:
-        return Npuzzle(self.n, list(range(self.n * self.n)))
+        return Npuzzle(3, [1, 2, 3, 8, 0, 4, 7, 6, 5])
+        # return Npuzzle(self.n, list(range(self.n * self.n)))
 
     # note: I don't know if it's the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:

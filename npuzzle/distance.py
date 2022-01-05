@@ -1,6 +1,7 @@
 from typing import Protocol
 
-from npuzzle.npuzzle import EMPTY_TILE, Npuzzle, index_to_coor
+from npuzzle.npuzzle import EMPTY_TILE, Npuzzle
+from npuzzle.utils import index_to_coor
 
 
 class Distance(Protocol):
@@ -20,3 +21,10 @@ class Manhattan(Distance):
             distance += abs(src_x - dst_x)
             distance += abs(src_y - dst_y)
         return distance
+
+
+AVAILABLE_HEURISTICS = [
+    Manhattan,
+]
+
+DEFAULT_HEURISTIC = Manhattan
