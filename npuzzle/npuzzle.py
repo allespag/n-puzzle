@@ -115,19 +115,48 @@ class Npuzzle:
         # return Npuzzle(self.n, list(range(self.n * self.n)))
 
     # TODO
+    # I do not understand how and why
     @property
     def solvable(self) -> bool:
-        return True
 
-    # note: I don't know if it's the right way to do things, for now it is what it is.
+        current_empty_x, current_empty_y = index_to_coor(
+            self.empty_tile, (self.n, self.n)
+        )
+        final_empty_x, final_empty_y = index_to_coor(
+            self.goal.empty_tile, (self.n, self.n)
+        )
+        empty_tile_moves = abs(current_empty_x - final_empty_x)
+        empty_tile_moves += abs(current_empty_y - final_empty_y)
+
+        inversion = 0
+        for i, tile in enumerate(self.tiles):
+            if tile == EMPTY_TILE:
+                continue
+            goal_index = self.goal.tiles.index(tile)
+            src_x, src_y = index_to_coor(i, (self.n, self.n))
+            dst_x, dst_y = index_to_coor(goal_index, (self.n, self.n))
+            inversion += abs(src_x - dst_x)
+            inversion += abs(src_y - dst_y)
+            print(inversion)
+
+        print(self)
+        print(f"{empty_tile_moves=}")
+        print(f"{inversion=}")
+
+        return empty_tile_moves % 2 == inversion % 2
+
+    # note: I know this is not the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:
-        moves = [
-            Npuzzle.__make_up,
-            Npuzzle.__make_right,
-            Npuzzle.__make_down,
-            Npuzzle.__make_left,
-        ]
-        return moves[move](self)
+        if move == Move.UP:
+            return self.__make_up()
+        elif move == Move.RIGHT:
+            return self.__make_right()
+        elif move == Move.DOWN:
+            return self.__make_down()
+        elif move == Move.LEFT:
+            return self.__make_left()
+        else:
+            return False
 
     def __make_up(self) -> bool:
         src = self.empty_tile
