@@ -63,7 +63,7 @@ class AStar(Solver):
         return any(node.state.tiles == elem.state.tiles for elem in self.close)
 
 
-AVAILABLE_SOLVER = [
+AVAILABLE_SOLVERS = [
     AStar,
 ]
 

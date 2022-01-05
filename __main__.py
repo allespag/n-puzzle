@@ -3,7 +3,7 @@ import argparse
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC
 from npuzzle.node import Node  # remove
 from npuzzle.npuzzle import Npuzzle
-from npuzzle.solver import AVAILABLE_SOLVER, DEFAULT_SOLVER
+from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER
 
 
 def main(args: argparse.Namespace) -> None:
@@ -32,7 +32,7 @@ def main(args: argparse.Namespace) -> None:
 
     # choose a solver
     solver = next(
-        filter(lambda s: s.__name__ == args.solver, AVAILABLE_SOLVER),
+        filter(lambda s: s.__name__ == args.solver, AVAILABLE_SOLVERS),
         DEFAULT_SOLVER,
     )(heuristic())
 
@@ -66,12 +66,12 @@ def get_args() -> argparse.Namespace:
     def check_solver(value: str) -> str:
         """Check the value of solver."""
 
-        AVAILABLE_SOLVER_str = [s.__name__ for s in AVAILABLE_SOLVER]
-        if value in AVAILABLE_SOLVER_str:
+        AVAILABLE_SOLVERS_str = [s.__name__ for s in AVAILABLE_SOLVERS]
+        if value in AVAILABLE_SOLVERS_str:
             return value
         else:
             raise argparse.ArgumentTypeError(
-                f"The value of 'heuristic' must be in {AVAILABLE_SOLVER_str}. ({value} here)"
+                f"The value of 'heuristic' must be in {AVAILABLE_SOLVERS_str}. ({value} here)"
             )
 
     parser = argparse.ArgumentParser(prog="n-puzzle")
