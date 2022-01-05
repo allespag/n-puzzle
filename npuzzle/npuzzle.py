@@ -4,7 +4,7 @@ import copy
 import random
 from enum import IntEnum, auto
 
-from npuzzle.utils import coor_in_list, index_in_list
+from npuzzle.utils import coor_in_list, coor_to_index, index_in_list, index_to_coor
 
 EMPTY_TILE = 0
 MIN_N_VALUE = 2
@@ -108,11 +108,16 @@ class Npuzzle:
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
 
-    # WRONG
+    # TODO: unWRONG this
     @property
     def goal(self) -> Npuzzle:
         return Npuzzle(3, [1, 2, 3, 8, 0, 4, 7, 6, 5])
         # return Npuzzle(self.n, list(range(self.n * self.n)))
+
+    # TODO
+    @property
+    def solvable(self) -> bool:
+        return True
 
     # note: I don't know if it's the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:
@@ -136,14 +141,14 @@ class Npuzzle:
         return True
 
     def __make_right(self) -> bool:
-        src_x = self.empty_tile % self.n
+        src_x, src_y = index_to_coor(self.empty_tile, (self.n, self.n))
         dst_x = src_x + 1
-        dst_y = self.empty_tile // self.n
+        dst_y = src_y
 
         if not coor_in_list((dst_x, dst_y), (self.n, self.n)):
             return False
 
-        dst = dst_y * self.n + dst_x
+        dst = coor_to_index((dst_x, dst_y), (self.n, self.n))
 
         self.tiles[self.empty_tile] = self.tiles[dst]
         self.tiles[dst] = EMPTY_TILE
@@ -162,14 +167,14 @@ class Npuzzle:
         return True
 
     def __make_left(self) -> bool:
-        src_x = self.empty_tile % self.n
+        src_x, src_y = index_to_coor(self.empty_tile, (self.n, self.n))
         dst_x = src_x - 1
-        dst_y = self.empty_tile // self.n
+        dst_y = src_y
 
         if not coor_in_list((dst_x, dst_y), (self.n, self.n)):
             return False
 
-        dst = dst_y * self.n + dst_x
+        dst = coor_to_index((dst_x, dst_y), (self.n, self.n))
 
         self.tiles[self.empty_tile] = self.tiles[dst]
         self.tiles[dst] = EMPTY_TILE

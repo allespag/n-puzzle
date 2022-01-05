@@ -19,6 +19,11 @@ def main(args: argparse.Namespace) -> None:
     else:
         puzzle = Npuzzle.from_random(args.random)
 
+    # check if the puzzle is solvable
+    if not puzzle.solvable:
+        print(f"This puzzle can't be solved.\n{puzzle}")
+        return
+
     # choose a heuristic evaluator
     heuristic = next(
         filter(lambda h: h.__name__ == args.heuristic, AVAILABLE_HEURISTICS),
