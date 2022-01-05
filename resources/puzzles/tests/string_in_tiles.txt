@@ -1,0 +1,6 @@
+# This is a bad puzzle :(
+
+3
+0 2 3
+1 4 S   # <- 'S' not 5
+8 7 6

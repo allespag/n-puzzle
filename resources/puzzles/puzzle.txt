@@ -1,0 +1,8 @@
+# This is my first puzzle !
+
+3       # n
+0 2 3   # tiles
+1 4 5
+8 7 6
+
+# end
