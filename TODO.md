@@ -2,7 +2,7 @@
 
 ## npuzzle.py
 
-* Trouver une façon de vérifier l'égalité entre 2 Npuzzle. Une idée naive :
+<!-- * Trouver une façon de vérifier l'égalité entre 2 Npuzzle. Une idée naive :
 
 ```python
 class Npuzzle:
@@ -28,9 +28,9 @@ Le problème sur cette implémentation c'est que `0` dans `self.titles` peut êt
         b.remove(EMPTY_TILE)
 
         return a == b
-```
+``` -->
 
-* J'ai 4 fonctions type "utils" dans ce fichier :
+<!-- * J'ai 4 fonctions type "utils" dans ce fichier :
 
 ```python
 # npuzzle.py
@@ -59,9 +59,9 @@ def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
 
 Peut être qu'il faut les déplacer dans un fichier `utils.py` ?
 
-**UPDATE**: C'est fait.
+**UPDATE**: C'est fait. -->
 
-* J'ai écris 2 fonctions pour pouvoir convertir un index vers des coordonnées et inversement mais je ne les utilise pas dans les méthodes `__make_[UP|RIGHT|DOWN|LEFT]`.
+<!-- * J'ai écris 2 fonctions pour pouvoir convertir un index vers des coordonnées et inversement mais je ne les utilise pas dans les méthodes `__make_[UP|RIGHT|DOWN|LEFT]`.
 
 ```python
 # npuzzle.py
@@ -133,22 +133,38 @@ class Npuzzle:
 
 **NOTE**: je ne suis pas sûr qu'elles sont utiles pour `__make_up` et `__make_down`.
 
+**UPDATE**: C'est fait. -->
+
 * Tester `Npuzzle.from_file`. Il y a quelques tests dans `resources/puzzles/tests` mais je manque peut être des choses.
 
 * Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
+
+* Creer une methode pour verifier si une `Npuzzle` est solvable ou non
 
 ## solver.py
 
 * Je ne suis pas sûr que l'implémentation des différents `Solver` doit être dans `solver.py`. Le *potentiel* problème c'est les `import` qui n'ont aucun sens pour tel ou tel `Solver`.
 
-* Je pense qu'il y a un soucis lorsque j'utilise `in self.open.queue` ou `in self.close`. Je pense que les pointeurs ne sont pas les mêmes ou quelque chose du genre. Du coup, même si le `Node` est présent dans l'une des listes, puisque *potentiellement* ce n'est pas le pointeur, il n'est pas considéré dedans ?
+**UPDATE**: si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
 
-* Lorsque je log les `current_node.state.tiles` je vois qu'il y en a plusieurs identique...
+<!-- * Je pense qu'il y a un soucis lorsque j'utilise `in self.open.queue` ou `in self.close`. Je pense que les pointeurs ne sont pas les mêmes ou quelque chose du genre. Du coup, même si le `Node` est présent dans l'une des listes, puisque *potentiellement* ce n'est pas le pointeur, il n'est pas considéré dedans ?
 
-* Je ne comprends pas A*
+**UPDATE**: non -->
 
-* Je ne sais pas si c'est une bonne idée de generer les `successors` à l'intérieur de `Node`
+<!-- * Lorsque je log les `current_node.state.tiles` je vois qu'il y en a plusieurs identique...
+
+**UPDATE**: fixed -->
+
+<!-- * Je ne comprends pas A*
+
+**UPDATE**: En fait si, je manquais quelque chose dans le sujet -->
+
+<!-- * Je ne sais pas si c'est une bonne idée de generer les `successors` à l'intérieur de `Node`
+
+**UPDATE**: je ne sais toujours pas mais ce n'était pas la cause du problème -->
 
 ## distance.py
 
 * Même chose que pour `solver.py`. Est-ce que l'implémentation des différentes `Distance` doit être dans `distance.py` ? Sachant que, *je pense* que leurs implémentation vont être plus simple.
+
+**UPDATE**: Même chose que pour `solver.py`. Si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
