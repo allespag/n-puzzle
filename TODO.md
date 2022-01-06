@@ -20,6 +20,8 @@ Le problème sur cette implémentation c'est que `0` dans `self.titles` peut êt
 
 **UPDATE**: pour le moment la solution est la suivante. Cependant elle n'a pas était encore testé.
 
+**UPDATE2**: A cause de ma compréhension du sujet, la solution naive est *pour le moment* la bonne solution
+
 ```python
     def __eq__(self, other: Npuzzle) -> bool:
         a = self.tiles.copy()
@@ -139,6 +141,17 @@ class Npuzzle:
 
 * Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
 
+**UPDATE**: Je pense que ce n'est pas nécessaire de créer un algo pour ça. En temps normal, oui, mais dans mon cas (i.e. manque de temps), je ne pense pas que ça soit très pertinent. L'idée que j'ai atm c'est créer N fichier(s) pour décrire les N puzzle solution. Exemple:
+
+```
+# goal_3.txt
+# Goal for 3x3
+3
+1 2 3
+8 0 4
+7 6 5
+```
+
 * Creer une methode pour verifier si une `Npuzzle` est solvable ou non
 
 **UPDATE**: Je n'ai pas compris comme ça fonctionne
@@ -172,3 +185,13 @@ class Npuzzle:
 * Même chose que pour `solver.py`. Est-ce que l'implémentation des différentes `Distance` doit être dans `distance.py` ? Sachant que, *je pense* que leurs implémentation vont être plus simple.
 
 **UPDATE**: Même chose que pour `solver.py`. Si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
+
+## main.py
+
+* Faire un *"smart flag"* qui donne la solution la plus rapide avec différentes configurations. Exemple: solver1 avec distance1, distance2, ..., distanceN, ..., solverN avec distance1, distance2, ..., distanceN.
+
+* Afficher les informations demandé par le sujet !
+
+## README.md
+
+* Faire un truc stylé parce que les .md c'est cool
