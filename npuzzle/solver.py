@@ -1,11 +1,19 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from queue import PriorityQueue
 from typing import Protocol
 
 from npuzzle.distance import Distance
 from npuzzle.node import Node
 from npuzzle.npuzzle import Npuzzle
+
+
+@dataclass
+class Report:
+    time_complexity: int = 0
+    size_complexity: int = 0
+    path_size: int = 0
 
 
 class Solver(Protocol):
@@ -18,6 +26,7 @@ class AStar(Solver):
         self.open: PriorityQueue[Node] = PriorityQueue()
         self.close: set[Node] = set()
         self.distance: Distance = distance
+        self.report: Report = Report()
 
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)

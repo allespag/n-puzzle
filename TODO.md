@@ -196,6 +196,8 @@ class Npuzzle:
 
 * Afficher les informations demandé par le sujet !
 
+**UPDATE**: J'ai créer une class `Report`, je ne sais pas si c'est la meilleur idée, mais en gros, j'ai envie de créer un decorateur pour compter le nombre de fois qu'une methode a était appelé pour donner un rapport final. Il y a *sans doute* mieux.
+
 ## README.md
 
 * Faire un truc stylé parce que les .md c'est cool
