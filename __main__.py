@@ -1,7 +1,6 @@
 import argparse
 
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC
-from npuzzle.node import Node  # remove
 from npuzzle.npuzzle import Npuzzle
 from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER
 
@@ -28,25 +27,24 @@ def main(args: argparse.Namespace) -> None:
     heuristic = next(
         filter(lambda h: h.__name__ == args.heuristic, AVAILABLE_HEURISTICS),
         DEFAULT_HEURISTIC,
-    )
+    )()
 
     # choose a solver
     solver = next(
         filter(lambda s: s.__name__ == args.solver, AVAILABLE_SOLVERS),
         DEFAULT_SOLVER,
-    )(heuristic())
+    )(heuristic)
 
+    print(
+        f"Run with {type(solver).__name__} and {type(heuristic).__name__} for: \n{puzzle}\n"
+    )
     res = solver.run(puzzle, puzzle.goal)
 
-    # print path, should not be there
+    # print path
     if res is None:
         print("No solution found.")
     else:
-        print(puzzle.goal, end="\n********************\n")
-        current = res
-        while isinstance(current, Node):
-            print(current.state, end="\n********************\n")
-            current = current.parent
+        res.display_genealogy(ascending=False)
 
 
 def get_args() -> argparse.Namespace:
@@ -71,7 +69,7 @@ def get_args() -> argparse.Namespace:
             return value
         else:
             raise argparse.ArgumentTypeError(
-                f"The value of 'heuristic' must be in {AVAILABLE_SOLVERS_str}. ({value} here)"
+                f"The value of 'solver' must be in {AVAILABLE_SOLVERS_str}. ({value} here)"
             )
 
     parser = argparse.ArgumentParser(prog="n-puzzle")
@@ -95,17 +93,17 @@ def get_args() -> argparse.Namespace:
         "-he",
         "--heuristic",
         type=check_heuristic,
-        metavar="name",
+        metavar="NAME",
         default=DEFAULT_HEURISTIC.__name__,
-        help="TODO",
+        help="particular way of calculating the distance",
     )
     parser.add_argument(
         "-s",
         "--solver",
         type=check_solver,
-        metavar="name",
+        metavar="NAME",
         default=DEFAULT_SOLVER.__name__,
-        help="TODO",
+        help="the algorithm to use",
     )
 
     args = parser.parse_args()
