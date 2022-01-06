@@ -13,54 +13,46 @@ class Solver(Protocol):
         ...
 
 
-# note: i think A* should not be here
-#       so i can move import out
 class AStar(Solver):
     def __init__(self, distance: Distance):
         self.open: PriorityQueue[Node] = PriorityQueue()
-        self.close: list[Node] = []
-        self.distance = distance
+        self.close_: list[Node] = []
+        self.close: set[Node] = set()
+        self.distance: Distance = distance
 
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
-
         self.open.put(root)
+
         while not self.open.empty():
-            current_node = self.open.get()
+            current = self.open.get()
 
-            if current_node.state == goal:
-                print(f"{current_node.state=}")
-                return current_node
-            else:
-                self.close.append(current_node)
+            if current.state == goal:
+                return current
 
-            successors = current_node.successors
-            # print(f"{successors=!r}")
+            self.close.add(current)
+            successors = current.successors
+
             for successor in successors:
-                ########
                 if self.__node_in_close(successor):
                     continue
+                g = current.g + 1
+                if self.__node_in_open(successor):
+                    if g < successor.g:
+                        successor.g = g
                 else:
-                    successor.g = current_node.g + 1
+                    successor.g = g
                     successor.h = self.distance.compute(successor.state, goal)
                     successor.f = successor.g + successor.h
-                    successor.parent = current_node
+                    successor.parent = current
                     self.open.put(successor)
-                #######
-            # print(f"CURRENT = {current_node}")
-            # open_str = (
-            #     "[\n\t" + "\n\t".join(repr(elem) for elem in self.open.queue) + "\n]"
-            # )
-            # close_str = "[\n\t" + "\n\t".join(repr(elem) for elem in self.close) + "\n]"
-            # print(f"OPEN = {open_str}")
-            # print(f"CLOSE = {close_str}")
         return None
+
+    def __node_in_close(self, node: Node) -> bool:
+        return node in self.close
 
     def __node_in_open(self, node: Node) -> bool:
         return any(node.state.tiles == elem.state.tiles for elem in self.open.queue)
-
-    def __node_in_close(self, node: Node) -> bool:
-        return any(node.state.tiles == elem.state.tiles for elem in self.close)
 
 
 AVAILABLE_SOLVERS = [

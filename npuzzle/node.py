@@ -17,6 +17,22 @@ class Node:
     def __lt__(self, other: Node) -> bool:
         return self.f < other.f
 
+    def __eq__(self, other: Node) -> bool:
+        return self.__hash__() == other.__hash__()
+
+    def __hash__(self) -> int:
+        return id(self)
+
     @property
     def successors(self) -> list[Node]:
         return [Node(state) for state in self.state.successors]
+
+    def display_genealogy(self, ascending: bool = True) -> None:
+        if ascending:
+            print(self.state, end="\n\n")
+
+        if not self.parent is None:
+            self.parent.display_genealogy(ascending=ascending)
+
+        if not ascending:
+            print(self.state, end="\n\n")

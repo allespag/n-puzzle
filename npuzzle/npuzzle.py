@@ -97,12 +97,7 @@ class Npuzzle:
         return res.format(*self.tiles, digit=max_digit)
 
     def __eq__(self, other: Npuzzle) -> bool:
-        a = self.tiles.copy()
-        b = other.tiles.copy()
-        a.remove(EMPTY_TILE)
-        b.remove(EMPTY_TILE)
-
-        return a == b
+        return self.tiles == other.tiles
 
     @property
     def empty_tile(self) -> int:
@@ -137,12 +132,13 @@ class Npuzzle:
             dst_x, dst_y = index_to_coor(goal_index, (self.n, self.n))
             inversion += abs(src_x - dst_x)
             inversion += abs(src_y - dst_y)
-            print(inversion)
+            # print(inversion)
 
-        print(self)
-        print(f"{empty_tile_moves=}")
-        print(f"{inversion=}")
+        # print(self)
+        # print(f"{empty_tile_moves=}")
+        # print(f"{inversion=}")
 
+        print(empty_tile_moves, inversion)
         return empty_tile_moves % 2 == inversion % 2
 
     # note: I know this is not the right way to do things, for now it is what it is.
