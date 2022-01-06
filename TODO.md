@@ -152,6 +152,10 @@ class Npuzzle:
 7 6 5
 ```
 
+**UPDATE2**: `goal_3.txt`, `goal_4.txt` fait.
+
+**UPDATE3**: si le `path` vers mes goals est changé, j'ai un crash. Peut être verifier quelque part que le `path` fait sens.
+
 * Creer une methode pour verifier si une `Npuzzle` est solvable ou non
 
 **UPDATE**: Je n'ai pas compris comme ça fonctionne

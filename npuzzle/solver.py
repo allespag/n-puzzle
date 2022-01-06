@@ -16,7 +16,6 @@ class Solver(Protocol):
 class AStar(Solver):
     def __init__(self, distance: Distance):
         self.open: PriorityQueue[Node] = PriorityQueue()
-        self.close_: list[Node] = []
         self.close: set[Node] = set()
         self.distance: Distance = distance
 

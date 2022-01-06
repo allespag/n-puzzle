@@ -7,8 +7,9 @@ from enum import IntEnum, auto
 from npuzzle.utils import coor_in_list, coor_to_index, index_in_list, index_to_coor
 
 EMPTY_TILE = 0
-MIN_N_VALUE = 2
+MIN_N_VALUE = 3
 MAX_N_VALUE = 10
+GOALS_PATH = "states/goals"
 
 
 class Move(IntEnum):
@@ -103,11 +104,11 @@ class Npuzzle:
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
 
-    # TODO: unWRONG this
+    # note: I know this is not the right way to do things, for now it is what it is.
     @property
     def goal(self) -> Npuzzle:
-        return Npuzzle(3, [1, 2, 3, 8, 0, 4, 7, 6, 5])
-        # return Npuzzle(self.n, list(range(self.n * self.n)))
+        filename = f"{GOALS_PATH}/goal_{self.n}.txt"
+        return Npuzzle.from_file(filename)
 
     # TODO
     # I do not understand how and why
@@ -138,7 +139,7 @@ class Npuzzle:
         # print(f"{empty_tile_moves=}")
         # print(f"{inversion=}")
 
-        print(empty_tile_moves, inversion)
+        # print(empty_tile_moves, inversion)
         return empty_tile_moves % 2 == inversion % 2
 
     # note: I know this is not the right way to do things, for now it is what it is.

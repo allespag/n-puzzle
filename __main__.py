@@ -1,7 +1,7 @@
 import argparse
 
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC
-from npuzzle.npuzzle import Npuzzle
+from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
 from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER
 
 
@@ -36,7 +36,7 @@ def main(args: argparse.Namespace) -> None:
     )(heuristic)
 
     print(
-        f"Run with {type(solver).__name__} and {type(heuristic).__name__} for: \n{puzzle}\n"
+        f"For:\n{puzzle}\nRunning with {type(solver).__name__} and {type(heuristic).__name__}...\n"
     )
     res = solver.run(puzzle, puzzle.goal)
 
@@ -45,10 +45,22 @@ def main(args: argparse.Namespace) -> None:
         print("No solution found.")
     else:
         res.display_genealogy(ascending=False)
+        size = res.get_genealogy_size()
+        print(size)
 
 
 def get_args() -> argparse.Namespace:
     """Get the arguments from command line."""
+
+    def check_random(value: str) -> int:
+        """Check the size of the puzzle."""
+
+        if MIN_N_VALUE <= int(value) <= MAX_N_VALUE:
+            return int(value)
+        else:
+            raise argparse.ArgumentTypeError(
+                f"The value of 'random' must be in ({MIN_N_VALUE}, {MAX_N_VALUE}) range. ({value} here)"
+            )
 
     def check_heuristic(value: str) -> str:
         """Check the value of heuristic."""
@@ -84,7 +96,7 @@ def get_args() -> argparse.Namespace:
     group.add_argument(
         "-r",
         "--random",
-        type=int,
+        type=check_random,
         metavar="N",
         default=3,
         help="generate a random N puzzle",
