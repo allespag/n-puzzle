@@ -166,7 +166,9 @@ class Npuzzle:
 
 **UPDATE**: si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
 
-* `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
+<!-- * `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
+
+**UPDATE**: `self.close` est un `set` maintenant -->
 
 <!-- * Je pense qu'il y a un soucis lorsque j'utilise `in self.open.queue` ou `in self.close`. Je pense que les pointeurs ne sont pas les mêmes ou quelque chose du genre. Du coup, même si le `Node` est présent dans l'une des listes, puisque *potentiellement* ce n'est pas le pointeur, il n'est pas considéré dedans ?
 
@@ -197,6 +199,8 @@ class Npuzzle:
 * Afficher les informations demandé par le sujet !
 
 **UPDATE**: J'ai créer une class `Report`, je ne sais pas si c'est la meilleur idée, mais en gros, j'ai envie de créer un decorateur pour compter le nombre de fois qu'une methode a était appelé pour donner un rapport final. Il y a *sans doute* mieux.
+
+**UPDATE2**: L'ajout de `ReportManager` permet l'idée que j'avais, cependant je ne sais pas si c'est une bonne idée. *Pour le moment* ça fonctionne, mais attention.
 
 ## README.md
 
