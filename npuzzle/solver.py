@@ -1,36 +1,32 @@
-from __future__ import annotations
+from __future__ import annotations, division
 
-from dataclasses import dataclass
 from queue import PriorityQueue
 from typing import Protocol
 
 from npuzzle.distance import Distance
 from npuzzle.node import Node
 from npuzzle.npuzzle import Npuzzle
-
-
-@dataclass
-class Report:
-    time_complexity: int = 0
-    size_complexity: int = 0
-    path_size: int = 0
+from npuzzle.report import Report, ReportManager
 
 
 class Solver(Protocol):
+    report: Report
+
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         ...
 
 
-class AStar(Solver):
+class AStar:
     def __init__(self, distance: Distance):
         self.open: PriorityQueue[Node] = PriorityQueue()
         self.close: set[Node] = set()
         self.distance: Distance = distance
         self.report: Report = Report()
 
+    @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
-        self.open.put(root)
+        self.__add_to_open(root)
 
         while not self.open.empty():
             current = self.open.get()
@@ -53,8 +49,12 @@ class AStar(Solver):
                     successor.h = self.distance.compute(successor.state, goal)
                     successor.f = successor.g + successor.h
                     successor.parent = current
-                    self.open.put(successor)
+                    self.__add_to_open(successor)
         return None
+
+    @ReportManager.count
+    def __add_to_open(self, node: Node) -> None:
+        self.open.put(node)
 
     def __node_in_close(self, node: Node) -> bool:
         return node in self.close
@@ -63,8 +63,18 @@ class AStar(Solver):
         return any(node.state.tiles == elem.state.tiles for elem in self.open.queue)
 
 
-AVAILABLE_SOLVERS = [
+class IDAStar:
+    def __init__(self, distance: Distance):
+        self.distance: Distance = distance
+        self.report: Report = Report()
+
+    def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
+        return None
+
+
+AVAILABLE_SOLVERS: list[Solver] = [
     AStar,
+    IDAStar,
 ]
 
-DEFAULT_SOLVER = AStar
+DEFAULT_SOLVER: Solver = AStar

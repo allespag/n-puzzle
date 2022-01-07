@@ -1,8 +1,8 @@
 import argparse
 
-from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC
+from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER
+from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver
 
 
 def main(args: argparse.Namespace) -> None:
@@ -23,30 +23,23 @@ def main(args: argparse.Namespace) -> None:
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
-    # choose a heuristic evaluator
-    heuristic = next(
-        filter(lambda h: h.__name__ == args.heuristic, AVAILABLE_HEURISTICS),
-        DEFAULT_HEURISTIC,
-    )()
+    # get the heuristic
+    heuristic = args.heuristic()
 
-    # choose a solver
-    solver = next(
-        filter(lambda s: s.__name__ == args.solver, AVAILABLE_SOLVERS),
-        DEFAULT_SOLVER,
-    )(heuristic)
+    # get the solver
+    solver = args.solver(heuristic)
 
     print(
         f"For:\n{puzzle}\nRunning with {type(solver).__name__} and {type(heuristic).__name__}...\n"
     )
     res = solver.run(puzzle, puzzle.goal)
 
-    # print path
+    # print the report
     if res is None:
         print("No solution found.")
     else:
         res.display_genealogy(ascending=False)
-        size = res.get_genealogy_size()
-        print(size)
+        print(solver.report)
 
 
 def get_args() -> argparse.Namespace:
@@ -62,27 +55,25 @@ def get_args() -> argparse.Namespace:
                 f"The value of 'random' must be in ({MIN_N_VALUE}, {MAX_N_VALUE}) range. ({value} here)"
             )
 
-    def check_heuristic(value: str) -> str:
-        """Check the value of heuristic."""
-
-        AVAILABLE_HEURISTICS_str = [h.__name__ for h in AVAILABLE_HEURISTICS]
-        if value in AVAILABLE_HEURISTICS_str:
-            return value
-        else:
-            raise argparse.ArgumentTypeError(
-                f"The value of 'heuristic' must be in {AVAILABLE_HEURISTICS_str}. ({value} here)"
-            )
-
-    def check_solver(value: str) -> str:
+    def check_heuristic(value: str) -> Distance:
         """Check the value of solver."""
 
-        AVAILABLE_SOLVERS_str = [s.__name__ for s in AVAILABLE_SOLVERS]
-        if value in AVAILABLE_SOLVERS_str:
-            return value
-        else:
-            raise argparse.ArgumentTypeError(
-                f"The value of 'solver' must be in {AVAILABLE_SOLVERS_str}. ({value} here)"
-            )
+        for heuristic in AVAILABLE_HEURISTICS:
+            if heuristic.__name__ == value:  # type: ignore
+                return heuristic
+        raise argparse.ArgumentTypeError(
+            f"The value of 'heuristic' must be in {([heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS])}. ({value!r} here)"  # type: ignore
+        )
+
+    def check_solver(value: str) -> Solver:
+        """Check the value of solver."""
+
+        for solver in AVAILABLE_SOLVERS:
+            if solver.__name__ == value:  # type: ignore
+                return solver
+        raise argparse.ArgumentTypeError(
+            f"The value of 'solver' must be in {([solver.__name__ for solver in AVAILABLE_SOLVERS])}. ({value!r} here)"  # type: ignore
+        )
 
     parser = argparse.ArgumentParser(prog="n-puzzle")
     group = parser.add_mutually_exclusive_group()
@@ -106,7 +97,7 @@ def get_args() -> argparse.Namespace:
         "--heuristic",
         type=check_heuristic,
         metavar="NAME",
-        default=DEFAULT_HEURISTIC.__name__,
+        default=DEFAULT_HEURISTIC,
         help="particular way of calculating the distance",
     )
     parser.add_argument(
@@ -114,7 +105,7 @@ def get_args() -> argparse.Namespace:
         "--solver",
         type=check_solver,
         metavar="NAME",
-        default=DEFAULT_SOLVER.__name__,
+        default=DEFAULT_SOLVER,
         help="the algorithm to use",
     )
 

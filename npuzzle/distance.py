@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Protocol
 
 from npuzzle.npuzzle import EMPTY_TILE, Npuzzle
@@ -23,8 +25,8 @@ class Manhattan(Distance):
         return distance
 
 
-AVAILABLE_HEURISTICS = [
+AVAILABLE_HEURISTICS: list[Distance] = [
     Manhattan,
 ]
 
-DEFAULT_HEURISTIC = Manhattan
+DEFAULT_HEURISTIC: Distance = Manhattan
