@@ -4,7 +4,8 @@ import copy
 import random
 from enum import IntEnum, auto
 
-from npuzzle.utils import coor_in_list, coor_to_index, index_in_list, index_to_coor
+from npuzzle.utils import (coor_in_list, coor_to_index, index_in_list,
+                           index_to_coor)
 
 EMPTY_TILE = 0
 MIN_N_VALUE = 3
@@ -62,8 +63,8 @@ class Npuzzle:
         self.n = n
         self.tiles = tiles
 
-    @staticmethod
-    def from_file(path: str) -> Npuzzle:
+    @classmethod
+    def from_file(cls, path: str) -> Npuzzle:
         n = -1
         tiles: list[int] = []
         with open(path) as f:
@@ -79,14 +80,14 @@ class Npuzzle:
                     n = line[0]
                 else:
                     tiles += line
-        return Npuzzle(n, tiles)
+        return cls(n, tiles)
 
-    @staticmethod
-    def from_random(n: int) -> Npuzzle:
+    @classmethod
+    def from_random(cls, n: int) -> Npuzzle:
         tiles = list(range(n * n))
         random.shuffle(tiles)
 
-        return Npuzzle(n, tiles)
+        return cls(n, tiles)
 
     def __repr__(self) -> str:
         return f"Npuzzle({self.tiles}, n={self.n}, @{hex(id(self))})"
