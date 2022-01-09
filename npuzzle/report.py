@@ -17,8 +17,8 @@ class Report:
     time_complexity: int = 0
     size_complexity: int = 0
     max_size_complexity: int = 0
-    start: float | None = None
-    end: float | None = None
+    start: int | None = None
+    end: int | None = None
 
     def __str__(self) -> str:
         return f"""Report(
@@ -27,7 +27,7 @@ class Report:
         In {self.time_taken * 1e-9:.2}s\n)"""
 
     @staticmethod
-    def current_time() -> float:
+    def current_time() -> int:
         return time.perf_counter_ns()
 
     @property
