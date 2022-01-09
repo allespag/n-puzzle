@@ -152,7 +152,7 @@ class Npuzzle:
 7 6 5
 ```
 
-**UPDATE2**: `goal_3.txt`, `goal_4.txt` fait.
+**UPDATE2**: `goal_3.txt`, `goal_4.txt`, `goal_5.txt` fait.
 
 **UPDATE3**: si le `path` vers mes goals est changé, j'ai un crash. Peut être verifier quelque part que le `path` fait sens.
 
@@ -196,11 +196,13 @@ class Npuzzle:
 
 * Faire un *"smart flag"* qui donne la solution la plus rapide avec différentes configurations. Exemple: solver1 avec distance1, distance2, ..., distanceN, ..., solverN avec distance1, distance2, ..., distanceN.
 
-* Afficher les informations demandé par le sujet !
+<!-- * Afficher les informations demandé par le sujet !
 
 **UPDATE**: J'ai créer une class `Report`, je ne sais pas si c'est la meilleur idée, mais en gros, j'ai envie de créer un decorateur pour compter le nombre de fois qu'une methode a était appelé pour donner un rapport final. Il y a *sans doute* mieux.
 
 **UPDATE2**: L'ajout de `ReportManager` permet l'idée que j'avais, cependant je ne sais pas si c'est une bonne idée. *Pour le moment* ça fonctionne, mais attention.
+
+**UPDATE3**: C'est fait -->
 
 ## README.md
 
