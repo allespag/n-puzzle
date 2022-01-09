@@ -4,8 +4,7 @@ import copy
 import random
 from enum import IntEnum, auto
 
-from npuzzle.utils import (coor_in_list, coor_to_index, index_in_list,
-                           index_to_coor)
+from npuzzle.utils import coor_in_list, coor_to_index, index_in_list, index_to_coor
 
 EMPTY_TILE = 0
 MIN_N_VALUE = 3

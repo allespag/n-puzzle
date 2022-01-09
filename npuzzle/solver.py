@@ -63,7 +63,8 @@ class AStar:
     @ReportManager.balance(-1)
     @ReportManager.count
     def __remove_from_open(self) -> Node:
-        return self.open.get()
+        result = self.open.get()
+        return result
 
     def __node_in_close(self, node: Node) -> bool:
         return node in self.close

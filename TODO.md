@@ -166,6 +166,8 @@ class Npuzzle:
 
 **UPDATE**: si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
 
+* `Solver.__node_in_open` est très, très lent. Le `any` prend une éternité...
+
 <!-- * `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
 
 **UPDATE**: `self.close` est un `set` maintenant -->

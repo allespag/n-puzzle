@@ -1,5 +1,11 @@
 import argparse
 
+__CHECK_PERF = True
+
+if __CHECK_PERF:
+    import cProfile
+    import pstats
+
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
 from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver
@@ -32,7 +38,14 @@ def main(args: argparse.Namespace) -> None:
     print(
         f"For:\n{puzzle}\nRunning with {type(solver).__name__} and {type(heuristic).__name__}...\n"
     )
-    res = solver.run(puzzle, puzzle.goal)
+
+    if __CHECK_PERF:
+        profile = cProfile.Profile()
+        res = profile.runcall(solver.run, puzzle, puzzle.goal)
+        ps = pstats.Stats(profile)
+        ps.print_stats()
+    else:
+        res = solver.run(puzzle, puzzle.goal)
 
     # print the report
     if res is None:
