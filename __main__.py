@@ -39,7 +39,7 @@ def main(args: argparse.Namespace) -> None:
         print("No solution found.")
     else:
         res.display_genealogy(ascending=False)
-        print(solver.report)
+        print(f"{solver.report}")
 
 
 def get_args() -> argparse.Namespace:

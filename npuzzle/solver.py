@@ -1,4 +1,4 @@
-from __future__ import annotations, division
+from __future__ import annotations
 
 from queue import PriorityQueue
 from typing import Protocol
@@ -29,12 +29,12 @@ class AStar:
         self.__add_to_open(root)
 
         while not self.open.empty():
-            current = self.open.get()
+            current = self.__remove_from_open()
 
             if current.state == goal:
                 return current
 
-            self.close.add(current)
+            self.__add_to_close(current)
             successors = current.successors
 
             for successor in successors:
@@ -52,9 +52,18 @@ class AStar:
                     self.__add_to_open(successor)
         return None
 
-    @ReportManager.count
+    @ReportManager.balance(1)
     def __add_to_open(self, node: Node) -> None:
         self.open.put(node)
+
+    @ReportManager.balance(1)
+    def __add_to_close(self, node: Node) -> None:
+        self.close.add(node)
+
+    @ReportManager.balance(-1)
+    @ReportManager.count
+    def __remove_from_open(self) -> Node:
+        return self.open.get()
 
     def __node_in_close(self, node: Node) -> bool:
         return node in self.close
