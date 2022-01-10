@@ -160,6 +160,8 @@ class Npuzzle:
 
 **UPDATE**: Je n'ai pas compris comme ça fonctionne
 
+**UPDATE2**: C'est fait, **MAIS** besoin d'être tester !
+
 ## solver.py
 
 * Je ne suis pas sûr que l'implémentation des différents `Solver` doit être dans `solver.py`. Le *potentiel* problème c'est les `import` qui n'ont aucun sens pour tel ou tel `Solver`.
@@ -209,6 +211,8 @@ class Npuzzle:
 **UPDATE2**: L'ajout de `ReportManager` permet l'idée que j'avais, cependant je ne sais pas si c'est une bonne idée. *Pour le moment* ça fonctionne, mais attention.
 
 **UPDATE3**: C'est fait -->
+
+* Faire un flag `--kompare` pour *comparer* les différents algo, les différents heuristiques, et peut être faire un graphique avec `matplotlib`
 
 ## README.md
 
