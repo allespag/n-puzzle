@@ -24,7 +24,7 @@ class Report:
         return f"""Report(
         Complexity in time: {self.time_complexity},
         Complexity in size: {self.max_size_complexity},
-        In {self.time_taken * 1e-9:.2}s\n)"""
+        In {self.time_taken * 1e-9:.2f}s\n)"""
 
     @staticmethod
     def current_time() -> int:
