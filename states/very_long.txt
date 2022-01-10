@@ -1,0 +1,6 @@
+# This puzzle took something like +20s
+# with: AStar and Manhattan
+3
+6 4 0
+7 5 3
+8 1 2
