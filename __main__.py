@@ -25,7 +25,7 @@ def main(args: argparse.Namespace) -> None:
         puzzle = Npuzzle.from_random(args.random)
 
     # check if the puzzle is solvable
-    if not puzzle.solvable:
+    if not puzzle.is_solvable():
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
@@ -52,6 +52,8 @@ def main(args: argparse.Namespace) -> None:
         print("No solution found.")
     else:
         res.display_genealogy(ascending=False)
+        size = res.get_genealogy_size() - 1
+        print(f"In {size} step(s)")
         print(f"{solver.report}")
 
 
