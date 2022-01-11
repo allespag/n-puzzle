@@ -21,7 +21,7 @@ class Node:
         return self.__hash__() == other.__hash__()
 
     def __hash__(self) -> int:
-        return id(self)
+        return hash(tuple(self.state.tiles))
 
     @property
     def successors(self) -> list[Node]:

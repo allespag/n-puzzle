@@ -172,7 +172,9 @@ class Npuzzle:
 
 **UPDATE**: si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
 
-* `Solver.__node_in_open` est très, très lent. Le `any` prend une éternité...
+<!-- * `Solver.__node_in_open` est très, très lent. Le `any` prend une éternité...
+
+**UPDATE**: J'ai ajouté un `Solver.__open_hash` pour supprimé le `any`. Les perfs pour le 3x3 sont turbo cool. *Cependant*, le 4*4 est pas ouf. Je pense que `A*` n'est pas adapté. -->
 
 * Ajouter des algos
 

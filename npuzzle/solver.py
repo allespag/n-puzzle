@@ -17,8 +17,9 @@ class Solver(Protocol):
 
 
 class AStar:
-    def __init__(self, distance: Distance):
+    def __init__(self, distance: Distance) -> None:
         self.open: PriorityQueue[Node] = PriorityQueue()
+        self.__open_hash: set[Node] = set()
         self.close: set[Node] = set()
         self.distance: Distance = distance
         self.report: Report = Report()
@@ -55,6 +56,7 @@ class AStar:
     @ReportManager.balance(1)
     def __add_to_open(self, node: Node) -> None:
         self.open.put(node)
+        self.__open_hash.add(node)
 
     @ReportManager.balance(1)
     def __add_to_close(self, node: Node) -> None:
@@ -64,17 +66,27 @@ class AStar:
     @ReportManager.count
     def __remove_from_open(self) -> Node:
         result = self.open.get()
+        self.__open_hash.remove(result)
         return result
 
     def __node_in_close(self, node: Node) -> bool:
         return node in self.close
 
     def __node_in_open(self, node: Node) -> bool:
-        return any(node.state.tiles == elem.state.tiles for elem in self.open.queue)
+        return node in self.__open_hash
 
 
-class IDAStar:
-    def __init__(self, distance: Distance):
+class GreedySearch:
+    def __init__(self, distance: Distance) -> None:
+        self.distance: Distance = distance
+        self.report: Report = Report()
+
+    def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
+        return None
+
+
+class JumpPointSearch:
+    def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
         self.report: Report = Report()
 
@@ -84,7 +96,6 @@ class IDAStar:
 
 AVAILABLE_SOLVERS: list[Solver] = [
     AStar,
-    IDAStar,
 ]
 
 DEFAULT_SOLVER: Solver = AStar
