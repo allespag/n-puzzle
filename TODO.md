@@ -160,7 +160,11 @@ class Npuzzle:
 
 **UPDATE**: Je n'ai pas compris comme ça fonctionne
 
-**UPDATE2**: C'est fait, **MAIS** besoin d'être tester !
+**UPDATE2**: C'est fait, **MAIS** besoin d'être testé !
+
+<!-- * Dans `Npuzzle.from_random`, j'ai ajouté un flag `solvable`. Si il est vrai, alors le puzzle que je retourne **doit** être solvable et inversement.
+
+**UPDATE**: C'est fait. -->
 
 ## solver.py
 
@@ -213,6 +217,10 @@ class Npuzzle:
 **UPDATE3**: C'est fait -->
 
 * Faire un flag `--kompare` pour *comparer* les différents algo, les différents heuristiques, et peut être faire un graphique avec `matplotlib`
+
+<!-- * Ajouter 2 flags comme le script de l'école pour determiner si le puzzle generé est solvable ou non
+
+**UPDATE**: C'est fait. -->
 
 ## README.md
 

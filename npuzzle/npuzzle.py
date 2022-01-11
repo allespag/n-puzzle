@@ -62,32 +62,6 @@ class Npuzzle:
         self.n = n
         self.tiles = tiles
 
-    @classmethod
-    def from_file(cls, path: str) -> Npuzzle:
-        n = -1
-        tiles: list[int] = []
-        with open(path) as f:
-            for line in f.readlines():
-                line = line.split("#")[0]
-                line = line.split(" ")
-                line = [elem.replace("\n", "") for elem in line]
-                line = list(filter(lambda x: x.isnumeric(), line))
-                if not line:
-                    continue
-                line = [int(elem) for elem in line]
-                if len(line) == 1:
-                    n = line[0]
-                else:
-                    tiles += line
-        return cls(n, tiles)
-
-    @classmethod
-    def from_random(cls, n: int, solvable: bool = True) -> Npuzzle:
-        tiles = list(range(n * n))
-        random.shuffle(tiles)
-
-        return cls(n, tiles)
-
     def __repr__(self) -> str:
         return f"Npuzzle({self.tiles}, n={self.n}, @{hex(id(self))})"
 
@@ -103,12 +77,6 @@ class Npuzzle:
     @property
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
-
-    # note: I know this is not the right way to do things, for now it is what it is.
-    @property
-    def goal(self) -> Npuzzle:
-        filename = f"{GOALS_PATH}/goal_{self.n}.txt"
-        return Npuzzle.from_file(filename)
 
     # TODO: test test TEST
     def is_solvable(self) -> bool:
@@ -130,6 +98,49 @@ class Npuzzle:
                 return inv % 2 == 0
             else:
                 return inv % 2 == 1
+
+    @classmethod
+    def from_file(cls, path: str) -> Npuzzle:
+        n = -1
+        tiles: list[int] = []
+        with open(path) as f:
+            for line in f.readlines():
+                line = line.split("#")[0]
+                line = line.split(" ")
+                line = [elem.replace("\n", "") for elem in line]
+                line = list(filter(lambda x: x.isnumeric(), line))
+                if not line:
+                    continue
+                line = [int(elem) for elem in line]
+                if len(line) == 1:
+                    n = line[0]
+                else:
+                    tiles += line
+        return cls(n, tiles)
+
+    @classmethod
+    def from_random(cls, n: int, solvable: bool = True) -> Npuzzle:
+        def reverse_solvability(puzzle: Npuzzle) -> None:
+            empty_tile = puzzle.empty_tile
+            if empty_tile == 0 or empty_tile == 1:
+                puzzle.tiles[-1], puzzle.tiles[-2] = puzzle.tiles[-2], puzzle.tiles[-1]
+            else:
+                puzzle.tiles[0], puzzle.tiles[1] = puzzle.tiles[1], puzzle.tiles[0]
+
+        tiles = list(range(n * n))
+        random.shuffle(tiles)
+        result = cls(n, tiles)
+
+        if result.is_solvable() ^ solvable:
+            reverse_solvability(result)
+
+        return result
+
+    # note: I know this is not the right way to do things, for now it is what it is.
+    @property
+    def goal(self) -> Npuzzle:
+        filename = f"{GOALS_PATH}/goal_{self.n}.txt"
+        return Npuzzle.from_file(filename)
 
     # note: I know this is not the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:

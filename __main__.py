@@ -1,6 +1,6 @@
 import argparse
 
-__CHECK_PERF = True
+__CHECK_PERF = False
 
 if __CHECK_PERF:
     import cProfile
@@ -22,7 +22,7 @@ def main(args: argparse.Namespace) -> None:
             print(f"Error: {e}")
             return
     else:
-        puzzle = Npuzzle.from_random(args.random)
+        puzzle = Npuzzle.from_random(args.random, solvable=not args.unsolvable)
 
     # check if the puzzle is solvable
     if not puzzle.is_solvable():
@@ -54,7 +54,7 @@ def main(args: argparse.Namespace) -> None:
         res.display_genealogy(ascending=False)
         size = res.get_genealogy_size() - 1
         print(f"In {size} step(s)")
-        print(f"{solver.report}")
+        print(solver.report)
 
 
 def get_args() -> argparse.Namespace:
@@ -122,6 +122,13 @@ def get_args() -> argparse.Namespace:
         metavar="NAME",
         default=DEFAULT_SOLVER,
         help="the algorithm to use",
+    )
+    parser.add_argument(
+        "-u",
+        "--unsolvable",
+        action="store_true",
+        default=False,
+        help="Forces generation of an unsolvable puzzle. Ignored when -f ",
     )
 
     args = parser.parse_args()
