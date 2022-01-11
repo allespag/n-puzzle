@@ -51,10 +51,14 @@ def main(args: argparse.Namespace) -> None:
     if res is None:
         print("No solution found.")
     else:
-        res.display_genealogy(ascending=False)
-        size = res.get_genealogy_size() - 1
-        print(f"In {size} step(s)")
-        print(solver.report)
+        try:
+            res.display_genealogy(ascending=False)
+            size = res.get_genealogy_size() - 1
+            print(f"In {size} step(s)")
+        except RecursionError:
+            print("The path is too big to be displayed.")
+        finally:
+            print(solver.report)
 
 
 def get_args() -> argparse.Namespace:
