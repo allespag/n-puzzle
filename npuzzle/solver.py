@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from queue import PriorityQueue
-from typing import Protocol
+from queue import LifoQueue, PriorityQueue, Queue
+from typing import Counter, Protocol
 
 from npuzzle.distance import Distance
 from npuzzle.node import Node
@@ -76,6 +76,83 @@ class AStar:
         return node in self.__open_hash
 
 
+class BFS:
+    def __init__(self, distance: Distance) -> None:
+        self.queue: Queue[Node] = Queue()
+        self.visited: set[Node] = set()
+        self.report: Report = Report()
+
+    @ReportManager.time
+    def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
+        root = Node(start)
+        self.__add_to_visited(root)
+        self.__add_to_queue(root)
+
+        while not self.queue.empty():
+            current = self.__remove_from_queue()
+
+            if current.state == goal:
+                return current
+
+            successors = current.successors
+            for successor in successors:
+                if not successor in self.visited:
+                    successor.parent = current
+                    self.__add_to_visited(successor)
+                    self.__add_to_queue(successor)
+
+    @ReportManager.balance(1)
+    def __add_to_queue(self, node: Node) -> None:
+        self.queue.put(node)
+
+    @ReportManager.balance(-1)
+    @ReportManager.count
+    def __remove_from_queue(self) -> Node:
+        return self.queue.get()
+
+    def __add_to_visited(self, node: Node) -> None:
+        self.visited.add(node)
+
+
+class DFS:
+    def __init__(self, distance: Distance) -> None:
+        self.stack: LifoQueue[Node] = LifoQueue()
+        self.visited: set[Node] = set()
+        self.report: Report = Report()
+
+    @ReportManager.time
+    def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
+        root = Node(start)
+        self.__add_to_stack(root)
+
+        while not self.stack.empty():
+            current = self.__remove_from_stack()
+
+            if current.state == goal:
+                return current
+
+            if not current in self.visited:
+                self.__add_to_visited(current)
+
+                successors = current.successors
+                for successor in successors:
+                    successor.parent = current
+                    self.__add_to_stack(successor)
+
+    @ReportManager.balance(1)
+    def __add_to_stack(self, node: Node) -> None:
+        self.stack.put(node)
+
+    @ReportManager.balance(-1)
+    @ReportManager.count
+    def __remove_from_stack(self) -> Node:
+        return self.stack.get()
+
+    def __add_to_visited(self, node: Node) -> None:
+        self.visited.add(node)
+
+
+# TODO
 class GreedySearch:
     def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
@@ -85,6 +162,7 @@ class GreedySearch:
         return None
 
 
+# TODO
 class JumpPointSearch:
     def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
@@ -96,6 +174,8 @@ class JumpPointSearch:
 
 AVAILABLE_SOLVERS: list[Solver] = [
     AStar,
+    BFS,
+    DFS,
 ]
 
 DEFAULT_SOLVER: Solver = AStar

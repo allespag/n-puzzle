@@ -178,6 +178,10 @@ class Npuzzle:
 
 * Ajouter des algos
 
+**UPDATE**: `BFS`, `DFS` fait.
+
+* Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
+
 <!-- * `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
 
 **UPDATE**: `self.close` est un `set` maintenant -->
