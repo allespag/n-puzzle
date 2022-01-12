@@ -37,8 +37,11 @@ class Node:
         if not ascending:
             print(self.state, end="\n\n")
 
-    def get_genealogy_size(self) -> int:
-        if self.parent is None:
-            return 1
-        else:
-            return self.parent.get_genealogy_size() + 1
+    def get_genealogy_size(self) -> int | float:
+        try:
+            if self.parent is None:
+                return 1
+            else:
+                return self.parent.get_genealogy_size() + 1
+        except RecursionError:
+            return float("-inf")
