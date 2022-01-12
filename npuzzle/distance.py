@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Protocol, Type
 
 from npuzzle.npuzzle import Npuzzle
 from npuzzle.utils import index_to_coor
@@ -28,9 +28,9 @@ class TilesOutOfPlace:
         return sum(a != b for a, b in zip(src.tiles, dst.tiles))
 
 
-AVAILABLE_HEURISTICS: list[Distance] = [
+AVAILABLE_HEURISTICS: list[Type[Distance]] = [
     Manhattan,
     TilesOutOfPlace,
 ]
 
-DEFAULT_HEURISTIC: Distance = Manhattan
+DEFAULT_HEURISTIC: Type[Distance] = Manhattan
