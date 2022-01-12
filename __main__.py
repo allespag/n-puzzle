@@ -1,11 +1,11 @@
 import argparse
 
 __CHECK_PERF = False
-
 if __CHECK_PERF:
     import cProfile
     import pstats
 
+from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
 from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver
@@ -39,6 +39,7 @@ def main(args: argparse.Namespace) -> None:
         f"For:\n{puzzle}\nRunning with {type(solver).__name__} and {type(heuristic).__name__}...\n"
     )
 
+    # run
     if __CHECK_PERF:
         profile = cProfile.Profile()
         res = profile.runcall(solver.run, puzzle, puzzle.goal)
@@ -53,8 +54,6 @@ def main(args: argparse.Namespace) -> None:
     else:
         try:
             res.display_genealogy(ascending=False)
-            size = res.get_genealogy_size() - 1
-            print(f"In {size} step(s)")
         except RecursionError:
             print("The path is too big to be displayed.")
         finally:
@@ -78,7 +77,7 @@ def get_args() -> argparse.Namespace:
         """Check the value of solver."""
 
         for heuristic in AVAILABLE_HEURISTICS:
-            if heuristic.__name__ == value:  # type: ignore
+            if heuristic.__name__ == value:
                 return heuristic
         raise argparse.ArgumentTypeError(
             f"The value of 'heuristic' must be in {([heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS])}. ({value!r} here)"  # type: ignore
@@ -88,7 +87,7 @@ def get_args() -> argparse.Namespace:
         """Check the value of solver."""
 
         for solver in AVAILABLE_SOLVERS:
-            if solver.__name__ == value:  # type: ignore
+            if solver.__name__ == value:
                 return solver
         raise argparse.ArgumentTypeError(
             f"The value of 'solver' must be in {([solver.__name__ for solver in AVAILABLE_SOLVERS])}. ({value!r} here)"  # type: ignore
@@ -141,4 +140,13 @@ def get_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = get_args()
-    main(args)
+
+    puzzle = Npuzzle.from_random(args.random, solvable=not args.unsolvable)
+    benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
+    # benchmark = Benchmark([DEFAULT_SOLVER], AVAILABLE_HEURISTICS)
+    reports = benchmark.run(puzzle, puzzle.goal)
+    for report in reports:
+        print(report)
+    benchmark.display(reports)
+
+    # main(args)
