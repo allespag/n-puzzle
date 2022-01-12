@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from queue import LifoQueue, PriorityQueue, Queue
-from typing import Counter, Protocol
+from typing import Protocol, Type
 
 from npuzzle.distance import Distance
 from npuzzle.node import Node
@@ -22,8 +22,9 @@ class AStar:
         self.__open_hash: set[Node] = set()
         self.close: set[Node] = set()
         self.distance: Distance = distance
-        self.report: Report = Report()
+        self.report: Report = Report(f"AStar with {type(self.distance).__name__}")
 
+    @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
@@ -37,7 +38,6 @@ class AStar:
 
             self.__add_to_close(current)
             successors = current.successors
-
             for successor in successors:
                 if self.__node_in_close(successor):
                     continue
@@ -77,11 +77,12 @@ class AStar:
 
 
 class BFS:
-    def __init__(self, distance: Distance) -> None:
+    def __init__(self, distance: Distance | None = None) -> None:
         self.queue: Queue[Node] = Queue()
         self.visited: set[Node] = set()
-        self.report: Report = Report()
+        self.report: Report = Report(author="BFS")
 
+    @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
@@ -95,6 +96,7 @@ class BFS:
                 return current
 
             successors = current.successors
+
             for successor in successors:
                 if not successor in self.visited:
                     successor.parent = current
@@ -115,11 +117,12 @@ class BFS:
 
 
 class DFS:
-    def __init__(self, distance: Distance) -> None:
+    def __init__(self, distance: Distance | None = None) -> None:
         self.stack: LifoQueue[Node] = LifoQueue()
         self.visited: set[Node] = set()
-        self.report: Report = Report()
+        self.report: Report = Report(author="DFS")
 
+    @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
@@ -156,26 +159,26 @@ class DFS:
 class GreedySearch:
     def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
-        self.report: Report = Report()
+        self.report: Report = Report("TODO")
 
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
-        return None
+        raise NotImplementedError
 
 
 # TODO
 class JumpPointSearch:
     def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
-        self.report: Report = Report()
+        self.report: Report = Report("TODO")
 
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
-        return None
+        raise NotImplementedError
 
 
-AVAILABLE_SOLVERS: list[Solver] = [
+AVAILABLE_SOLVERS: list[Type[Solver]] = [
     AStar,
     BFS,
     DFS,
 ]
 
-DEFAULT_SOLVER: Solver = AStar
+DEFAULT_SOLVER: Type[Solver] = AStar

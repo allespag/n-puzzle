@@ -14,17 +14,21 @@ class Reportable(Protocol):
 
 @dataclass
 class Report:
+    author: str
     time_complexity: int = 0
     size_complexity: int = 0
     max_size_complexity: int = 0
     start: int | None = None
     end: int | None = None
+    result: Any | None = None
 
     def __str__(self) -> str:
         return f"""Report(
+        Result: {self.result}
         Complexity in time: {self.time_complexity},
         Complexity in size: {self.max_size_complexity},
-        In {self.time_taken * 1e-9:.2f}s\n)"""
+        In {self.time_taken * 1e-9:.2f}s,
+        By {self.author},\n)"""
 
     @staticmethod
     def current_time() -> int:
@@ -76,6 +80,26 @@ class ReportManager:
                     instance.report.max_size_complexity = (
                         instance.report.size_complexity
                     )
+                return result
+
+            return wrapper
+
+        return decorator
+
+    @staticmethod
+    def as_result(
+        modifier: Callable[..., Any], if_failed: bool = True, default: Any = None
+    ) -> Callable[[Callable[..., T]], Callable[..., T]]:
+        def decorator(func: Callable[..., T]) -> Callable[..., T]:
+            @wraps(func)
+            def wrapper(instance: Reportable, *args: Any, **kwargs: Any) -> T:
+                result = func(instance, *args, **kwargs)
+
+                if not result is None or if_failed:
+                    try:
+                        instance.report.result = modifier(result)
+                    except Exception:
+                        instance.report.result = default
                 return result
 
             return wrapper
