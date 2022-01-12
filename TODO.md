@@ -182,6 +182,10 @@ class Npuzzle:
 
 * Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
 
+**UPDATE**: C'est chiant à faire, mais il faut trouver. Peut être avoir une fonction qui vérifie si le `Solver` a un attribut `distance` et déduire que le `Solver` est `Informed` dans ce cas.
+
+* Euuuh, `A*` ne trouve pas le chemin opti avec `Manhattan`
+
 <!-- * `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
 
 **UPDATE**: `self.close` est un `set` maintenant -->
@@ -212,7 +216,9 @@ class Npuzzle:
 
 ## main.py
 
-* Faire un *"smart flag"* qui donne la solution la plus rapide avec différentes configurations. Exemple: solver1 avec distance1, distance2, ..., distanceN, ..., solverN avec distance1, distance2, ..., distanceN.
+<!-- * Faire un *"smart flag"* qui donne la solution la plus rapide avec différentes configurations. Exemple: solver1 avec distance1, distance2, ..., distanceN, ..., solverN avec distance1, distance2, ..., distanceN.
+
+**UPDATE**: Je pense que c'est une mauvaise idée/une idée redondante avec le flag `--kompare`. Je close. -->
 
 <!-- * Afficher les informations demandé par le sujet !
 
