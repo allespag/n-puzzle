@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 from queue import LifoQueue, PriorityQueue, Queue
 from typing import Protocol, Type
 
@@ -77,7 +78,7 @@ class AStar:
 
 
 class BFS:
-    def __init__(self, distance: Distance | None = None) -> None:
+    def __init__(self) -> None:
         self.queue: Queue[Node] = Queue()
         self.visited: set[Node] = set()
         self.report: Report = Report(author="BFS")
@@ -117,7 +118,7 @@ class BFS:
 
 
 class DFS:
-    def __init__(self, distance: Distance | None = None) -> None:
+    def __init__(self) -> None:
         self.stack: LifoQueue[Node] = LifoQueue()
         self.visited: set[Node] = set()
         self.report: Report = Report(author="DFS")
@@ -182,3 +183,7 @@ AVAILABLE_SOLVERS: list[Type[Solver]] = [
 ]
 
 DEFAULT_SOLVER: Type[Solver] = AStar
+
+
+def is_informed(solver: Type[Solver]) -> bool:
+    return "distance" in inspect.signature(solver).parameters
