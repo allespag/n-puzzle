@@ -1,4 +1,5 @@
 import argparse
+from dataclasses import is_dataclass
 
 __CHECK_PERF = False
 if __CHECK_PERF:
@@ -8,7 +9,7 @@ if __CHECK_PERF:
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver
+from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver, is_informed
 
 
 def main(args: argparse.Namespace) -> None:
@@ -29,15 +30,24 @@ def main(args: argparse.Namespace) -> None:
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
-    # get the heuristic
-    heuristic = args.heuristic()
+    # if it's compare time, display the radar chart and leave
+    if args.kompare:
+        benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
+        reports = benchmark.run(puzzle, puzzle.goal)
 
-    # get the solver
-    solver = args.solver(heuristic)
+        for report in reports:
+            print(report)
 
-    print(
-        f"For:\n{puzzle}\nRunning with {type(solver).__name__} and {type(heuristic).__name__}...\n"
-    )
+        benchmark.display(reports)
+        return
+
+    # create the solver with its heuristic if necessary
+    solver = args.solver
+    if is_informed(solver):
+        heuristic = args.heuristic()
+        solver = solver(heuristic)
+    else:
+        solver = solver()
 
     # run
     if __CHECK_PERF:
@@ -133,6 +143,13 @@ def get_args() -> argparse.Namespace:
         default=False,
         help="Forces generation of an unsolvable puzzle. Ignored when -f ",
     )
+    parser.add_argument(
+        "-k",
+        "--kompare",
+        action="store_true",
+        default=False,
+        help="Display a nice plot to compare the different solvers",
+    )
 
     args = parser.parse_args()
     return args
@@ -140,13 +157,4 @@ def get_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = get_args()
-
-    puzzle = Npuzzle.from_random(args.random, solvable=not args.unsolvable)
-    benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
-    # benchmark = Benchmark([DEFAULT_SOLVER], AVAILABLE_HEURISTICS)
-    reports = benchmark.run(puzzle, puzzle.goal)
-    for report in reports:
-        print(report)
-    benchmark.display(reports)
-
-    # main(args)
+    main(args)

@@ -180,9 +180,20 @@ class Npuzzle:
 
 **UPDATE**: `BFS`, `DFS` fait.
 
-* Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
+<!-- * Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
 
 **UPDATE**: C'est chiant à faire, mais il faut trouver. Peut être avoir une fonction qui vérifie si le `Solver` a un attribut `distance` et déduire que le `Solver` est `Informed` dans ce cas.
+
+**UPDATE2**: La solution est la suivante:
+
+```python
+import inspect
+
+def is_informed(solver: Type[Solver]) -> bool:
+    return "distance" in inspect.signature(solver).parameters
+
+```
+Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 * Euuuh, `A*` ne trouve pas le chemin opti avec `Manhattan`
 
@@ -226,13 +237,18 @@ class Npuzzle:
 
 **UPDATE2**: L'ajout de `ReportManager` permet l'idée que j'avais, cependant je ne sais pas si c'est une bonne idée. *Pour le moment* ça fonctionne, mais attention.
 
-**UPDATE3**: C'est fait -->
+**UPDATE3**: C'est fait. -->
 
-* Faire un flag `--kompare` pour *comparer* les différents algo, les différents heuristiques, et peut être faire un graphique avec `matplotlib`
+<!-- * Faire un flag `--kompare` pour *comparer* les différents algo, les différents heuristiques, et peut être faire un graphique avec 
+`matplotlib`
+
+**UPDATE**: C'est fait. -->
 
 <!-- * Ajouter 2 flags comme le script de l'école pour determiner si le puzzle generé est solvable ou non
 
 **UPDATE**: C'est fait. -->
+
+* Pour le flag `--kompare`, peut être ajouter une cfg pour comparer les des `solvers` (ou des `distances`) en particulier
 
 ## README.md
 
