@@ -8,7 +8,7 @@ import numpy as np
 from npuzzle.distance import Distance
 from npuzzle.npuzzle import Npuzzle
 from npuzzle.report import Report
-from npuzzle.solver import Solver
+from npuzzle.solver import Solver, is_informed
 
 
 class Benchmark:
@@ -21,18 +21,25 @@ class Benchmark:
     def run(self, start: Npuzzle, goal: Npuzzle) -> list[Report]:
         reports: list[Report] = []
         for solver in self.solvers:
-            for distance in self.distances:
-                model: Solver = solver(distance())
+            if is_informed(solver):
+                for distance in self.distances:
+                    model = solver(distance())
+                    model.run(start, goal)
+                    reports.append(model.report)
+            else:
+                model = solver()
                 model.run(start, goal)
                 reports.append(model.report)
 
         return reports
 
     def display(self, reports: list[Report]) -> None:
+        plt.style.use("ggplot")
+
         categories = ["Time complexity", "Size complexity", "Time taken", "Result"]
         categories = [*categories, categories[0]]
 
-        infos = np.array(  # type: ignore
+        data = np.array(
             [
                 [
                     report.time_complexity,
@@ -44,16 +51,17 @@ class Benchmark:
                 for report in reports
             ]
         )
-        infos = infos / infos.max(axis=0)  # type: ignore
+        data = data / data.max(axis=0)
 
         label_loc = np.linspace(start=0, stop=2 * np.pi, num=len(categories))  # type: ignore
 
-        plt.figure(figsize=(8, 8))
+        plt.figure(num="Radar chart", figsize=(8, 8))
         plt.subplot(polar=True)
         plt.thetagrids(np.degrees(label_loc), labels=categories)
 
-        for info, report in zip(infos, reports):
-            plt.plot(label_loc, info, label=report.author)
+        for row, report in zip(data, reports):
+            plt.plot(label_loc, row, label=report.author)
 
+        plt.gca().axes.yaxis.set_ticklabels([])
         plt.legend()
         plt.show()
