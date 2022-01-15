@@ -23,10 +23,12 @@ class NNotInRangeError(Exception):
     """Exception raised when n is not between MIN_N_VALUE and MAX_N_VALUE."""
 
     def __init__(
-        self, n: int, message: str = f"n is not in ({MIN_N_VALUE}, {MAX_N_VALUE}) range"
+        self,
+        n: int,
+        message: str = f"n is not in ({MIN_N_VALUE}, {MAX_N_VALUE}) range.",
     ) -> None:
         self.n = n
-        self.message = message
+        self.message = f"{message}. ({self.n} here)"
         super().__init__(self.message)
 
 
@@ -79,6 +81,8 @@ class Npuzzle:
         return self.tiles.index(EMPTY_TILE)
 
     # TODO: test test TEST
+    # TODO: do not give same result as the gen from school
+    # so it's wrong
     def is_solvable(self) -> bool:
         inv = 0
         for i in range(self.n * self.n - 1):
