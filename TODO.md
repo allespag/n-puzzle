@@ -162,6 +162,8 @@ class Npuzzle:
 
 **UPDATE2**: C'est fait, **MAIS** besoin d'être testé !
 
+**UPDATE3**: Ne fonctionne pas dans certains cas. En gros, ça marche pas.
+
 <!-- * Dans `Npuzzle.from_random`, j'ai ajouté un flag `solvable`. Si il est vrai, alors le puzzle que je retourne **doit** être solvable et inversement.
 
 **UPDATE**: C'est fait. -->
@@ -180,6 +182,12 @@ class Npuzzle:
 
 **UPDATE**: `BFS`, `DFS` fait.
 
+**UPDATE2**: `IDA*` ajouter. Cependant il a pas l'air fou fou. TODO: voir pourquoi
+
+**UPDATE3**: `Greedy Search` fait. Il fonctionne bien pour `3x3`, `4x4`, `5x5`.
+
+* Ajouter un `uniform cost search`
+
 <!-- * Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
 
 **UPDATE**: C'est chiant à faire, mais il faut trouver. Peut être avoir une fonction qui vérifie si le `Solver` a un attribut `distance` et déduire que le `Solver` est `Informed` dans ce cas.
@@ -195,7 +203,9 @@ def is_informed(solver: Type[Solver]) -> bool:
 ```
 Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
-* Euuuh, `A*` ne trouve pas le chemin opti avec `Manhattan`
+<!-- * Euuuh, `A*` ne trouve pas le chemin opti avec `Manhattan`
+
+**UPDATE**: En fait c'est normal, `Manhattan` n'est pas ultra adapté. Voir un point dans `distance.py`. C'est fait. -->
 
 <!-- * `self.close` ne peut pas être une `list`. Il faut, *si j'ai bien compris* un objet qui implemente `__contain__` en **O(1)**. Genre un `set` ou un `dict` (ou peut être autre chose qui sait ?). Sachant que, *je pense* que l'objet stocké doit être hashable.
 
@@ -225,6 +235,8 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 * Ajouter des façons de calculer une distance. **Attention**, tu dois choisir des fonctions heuristiques dites "**admissible**" !
 
+* Regarde `linear conflict`
+
 ## main.py
 
 <!-- * Faire un *"smart flag"* qui donne la solution la plus rapide avec différentes configurations. Exemple: solver1 avec distance1, distance2, ..., distanceN, ..., solverN avec distance1, distance2, ..., distanceN.
@@ -253,3 +265,7 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 ## README.md
 
 * Faire un truc stylé parce que les .md c'est cool
+
+## report.py
+
+* Peut être renommer `size_complexity` en `current_size_complexity` et `max_size_complexity` en `size_complexity`
