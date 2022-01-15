@@ -87,6 +87,20 @@ class ReportManager:
         return decorator
 
     @staticmethod
+    def reset(attrs: list[str]) -> Callable[[Callable[..., T]], Callable[..., T]]:
+        def decorator(func: Callable[..., T]) -> Callable[..., T]:
+            @wraps(func)
+            def wrapper(instance: Reportable, *args: Any, **kwargs: Any) -> T:
+                result = func(instance, *args, **kwargs)
+                for attr in attrs:
+                    setattr(instance, attr, 0)
+                return result
+
+            return wrapper
+
+        return decorator
+
+    @staticmethod
     def as_result(
         modifier: Callable[..., Any], if_failed: bool = True, default: Any = None
     ) -> Callable[[Callable[..., T]], Callable[..., T]]:
