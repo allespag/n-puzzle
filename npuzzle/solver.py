@@ -54,7 +54,7 @@ class AStar:
                     self.__add_to_open(successor)
         return None
 
-    @ReportManager.balance(1)
+    @ReportManager.balance(2)
     def __add_to_open(self, node: Node) -> None:
         self.open.put(node)
         self.__open_hash.add(node)
@@ -63,7 +63,7 @@ class AStar:
     def __add_to_close(self, node: Node) -> None:
         self.close.add(node)
 
-    @ReportManager.balance(-1)
+    @ReportManager.balance(-2)
     @ReportManager.count
     def __remove_from_open(self) -> Node:
         result = self.open.get()
@@ -113,6 +113,7 @@ class BFS:
     def __remove_from_queue(self) -> Node:
         return self.queue.get()
 
+    @ReportManager.balance(1)
     def __add_to_visited(self, node: Node) -> None:
         self.visited.add(node)
 
@@ -152,18 +153,125 @@ class DFS:
     def __remove_from_stack(self) -> Node:
         return self.stack.get()
 
+    @ReportManager.balance(1)
     def __add_to_visited(self, node: Node) -> None:
         self.visited.add(node)
+
+
+# Not finished, results are weird
+class IDAStar:
+    def __init__(self, distance: Distance) -> None:
+        self.path: set[Node] = set()
+        self.distance: Distance = distance
+        self.report: Report = Report(f"IDAStar with {type(self.distance).__name__}")
+
+    @ReportManager.count
+    def __search(
+        self, node: Node, g: int, threshold: int, goal: Npuzzle
+    ) -> Node | int | float:
+        node.g = g
+        node.h = self.distance.compute(node.state, goal)
+        node.f = node.g + node.h
+
+        self.__add_to_path(node)
+
+        if node.f > threshold:
+            return node.f
+        if node.state == goal:
+            return node
+
+        min_ = float("+inf")
+        successors = node.successors
+        for successor in successors:
+            if not self.__node_in_path(successor):
+                successor.parent = node
+                self.__add_to_path(successor)
+                temp = self.__search(successor, node.g + 1, threshold, goal)
+                if isinstance(temp, Node):
+                    return temp
+                if temp < min_:
+                    min_ = temp
+
+        return min_
+
+    @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
+    @ReportManager.time
+    def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
+        root = Node(start)
+        threshold = self.distance.compute(root.state, goal)
+
+        while True:
+            self.__reset_path()
+            self.__add_to_path(root)
+            temp = self.__search(root, 0, threshold, goal)
+            if isinstance(temp, Node):
+                return temp
+            if temp == float("+inf"):
+                return None
+            threshold = temp
+
+    @ReportManager.balance(1)
+    def __add_to_path(self, node: Node) -> None:
+        self.path.add(node)
+
+    @ReportManager.reset(["size_complexity"])
+    def __reset_path(self) -> None:
+        self.path = set()
+
+    def __node_in_path(self, node: Node) -> bool:
+        return node in self.path
 
 
 # TODO
 class GreedySearch:
     def __init__(self, distance: Distance) -> None:
+        self.open: PriorityQueue[Node] = PriorityQueue()
+        self.close: set[Node] = set()
         self.distance: Distance = distance
-        self.report: Report = Report("TODO")
+        self.report: Report = Report(
+            f"GreedySearch with {type(self.distance).__name__}"
+        )
 
+    @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
+    @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
-        raise NotImplementedError
+        root = Node(start)
+        self.__add_to_open(root)
+
+        while not self.open.empty():
+            current = self.__remove_from_open()
+
+            if current.state == goal:
+                return current
+
+            self.__add_to_close(current)
+            successors = current.successors
+            for successor in successors:
+                if self.__node_in_close(successor):
+                    continue
+                else:
+                    successor.h = self.distance.compute(successor.state, goal)
+                    successor.f = successor.h
+                    successor.parent = current
+                    self.__add_to_open(successor)
+        return None
+
+    @ReportManager.balance(1)
+    def __add_to_open(self, node: Node) -> None:
+        self.open.put(node)
+
+    @ReportManager.balance(1)
+    def __add_to_close(self, node: Node) -> None:
+        self.close.add(node)
+
+    @ReportManager.balance(-1)
+    @ReportManager.count
+    def __remove_from_open(self) -> Node:
+        result = self.open.get()
+        return result
+
+    def __node_in_close(self, node: Node) -> bool:
+        return node in self.close
 
 
 # TODO
@@ -178,8 +286,10 @@ class JumpPointSearch:
 
 AVAILABLE_SOLVERS: list[Type[Solver]] = [
     AStar,
-    BFS,
-    DFS,
+    # BFS,
+    # DFS,
+    IDAStar,
+    GreedySearch,
 ]
 
 DEFAULT_SOLVER: Type[Solver] = AStar
