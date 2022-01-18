@@ -139,7 +139,7 @@ def get_args() -> argparse.Namespace:
         type=check_heuristic,
         metavar="NAME",
         default=DEFAULT_HEURISTIC,
-        help="particular way of calculating the distances",
+        help=f"particular way of calculating the distances. {[heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS]}",
     )
     parser.add_argument(
         "-s",
@@ -147,7 +147,7 @@ def get_args() -> argparse.Namespace:
         type=check_solver,
         metavar="NAME",
         default=DEFAULT_SOLVER,
-        help="the algorithm to use",
+        help=f"algorithm to use. {[solver.__name__ for solver in AVAILABLE_SOLVERS]}",
     )
     parser.add_argument(
         "-u",
