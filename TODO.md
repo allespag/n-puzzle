@@ -4,7 +4,6 @@
 
 * Docstrings ffs !
 
-
 ## npuzzle.py
 
 <!-- * Trouver une façon de vérifier l'égalité entre 2 Npuzzle. Une idée naive :
@@ -278,6 +277,8 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 **UPDATE**: C'est fait. -->
 
 * Pour le flag `--kompare`, peut être ajouter une cfg pour comparer les des `solvers` (ou des `distances`) en particulier
+
+* Peut être avoir un flag qui *log* le puzzle
 
 ## README.md
 
