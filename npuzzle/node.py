@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from npuzzle.npuzzle import Npuzzle
 
+COST = 1
+
 
 class Node:
     def __init__(self, state: Npuzzle) -> None:
