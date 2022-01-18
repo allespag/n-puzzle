@@ -85,28 +85,21 @@ class Npuzzle:
     def empty_tile(self) -> int:
         return self.tiles.index(EMPTY_TILE)
 
-    # TODO: test test TEST
-    # TODO: do not give same result as the gen from school
-    # so it's wrong
     def is_solvable(self) -> bool:
         inv = 0
+        goal = self.goal
         for i in range(self.n * self.n - 1):
             for j in range(i + 1, self.n * self.n):
-                if (
-                    self.tiles[i] != EMPTY_TILE
-                    and self.tiles[j] != EMPTY_TILE
-                    and self.tiles[i] > self.tiles[j]
-                ):
+                if goal.tiles.index(self.tiles[i]) > goal.tiles.index(self.tiles[j]):
                     inv += 1
+        goal_zero_coor = index_to_coor(goal.empty_tile, (self.n, self.n))
+        curr_zero_coor = index_to_coor(self.empty_tile, (self.n, self.n))
 
-        if self.n % 2 == 1:
-            return inv % 2 == 1
-        else:
-            empty_tile = self.empty_tile - 1
-            if empty_tile % 2 == 1:
-                return inv % 2 == 0
-            else:
-                return inv % 2 == 1
+        d = abs(goal_zero_coor[0] - curr_zero_coor[0]) + abs(
+            goal_zero_coor[1] - curr_zero_coor[1]
+        )
+
+        return d % 2 == inv % 2
 
     @classmethod
     def from_file(cls, path: str) -> Npuzzle:

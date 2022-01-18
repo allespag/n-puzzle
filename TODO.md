@@ -166,6 +166,8 @@ class Npuzzle:
 
 **UPDATE3**: Ne fonctionne pas dans certains cas. En gros, ça marche pas.
 
+**UPDATE4**: C'est *re*fait mais, **MAIS** besoin d'être *encore* testé.
+
 <!-- * Dans `Npuzzle.from_random`, j'ai ajouté un flag `solvable`. Si il est vrai, alors le puzzle que je retourne **doit** être solvable et inversement.
 
 **UPDATE**: C'est fait. -->

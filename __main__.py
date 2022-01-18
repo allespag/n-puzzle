@@ -32,7 +32,7 @@ def main(args: argparse.Namespace) -> None:
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
-    # compare if necessary
+    # compare if necessary and leave
     if args.all or args.kompare:
         benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
         reports = benchmark.run(puzzle, puzzle.goal)
