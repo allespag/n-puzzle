@@ -1,10 +1,12 @@
 import argparse
-from dataclasses import is_dataclass
+import configparser
 
 __CHECK_PERF = False
 if __CHECK_PERF:
     import cProfile
     import pstats
+
+from typing import Type
 
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
@@ -30,15 +32,16 @@ def main(args: argparse.Namespace) -> None:
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
-    # if it's compare time, display the radar chart and leave
-    if args.kompare:
+    # compare if necessary
+    if args.all or args.kompare:
         benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
         reports = benchmark.run(puzzle, puzzle.goal)
 
-        for report in reports:
-            print(report)
-
-        benchmark.display(reports)
+        if args.all:
+            for report in reports:
+                print(report)
+        if args.kompare:
+            benchmark.display(reports)
         return
 
     # create the solver with its heuristic if necessary
@@ -70,6 +73,16 @@ def main(args: argparse.Namespace) -> None:
             print(solver.report)
 
 
+# TODO
+def get_config(path: str):
+    """..."""
+
+    cfg = configparser.ConfigParser()
+    cfg.read(path)
+
+    return cfg
+
+
 def get_args() -> argparse.Namespace:
     """Get the arguments from command line."""
 
@@ -83,24 +96,24 @@ def get_args() -> argparse.Namespace:
                 f"The value of 'random' must be in ({MIN_N_VALUE}, {MAX_N_VALUE}) range. ({value} here)"
             )
 
-    def check_heuristic(value: str) -> Distance:
+    def check_heuristic(value: str) -> Type[Distance]:
         """Check the value of solver."""
 
         for heuristic in AVAILABLE_HEURISTICS:
             if heuristic.__name__ == value:
                 return heuristic
         raise argparse.ArgumentTypeError(
-            f"The value of 'heuristic' must be in {([heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS])}. ({value!r} here)"  # type: ignore
+            f"The value of 'heuristic' must be in {([heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS])}. ({value!r} here)"
         )
 
-    def check_solver(value: str) -> Solver:
+    def check_solver(value: str) -> Type[Solver]:
         """Check the value of solver."""
 
         for solver in AVAILABLE_SOLVERS:
             if solver.__name__ == value:
                 return solver
         raise argparse.ArgumentTypeError(
-            f"The value of 'solver' must be in {([solver.__name__ for solver in AVAILABLE_SOLVERS])}. ({value!r} here)"  # type: ignore
+            f"The value of 'solver' must be in {([solver.__name__ for solver in AVAILABLE_SOLVERS])}. ({value!r} here)"
         )
 
     parser = argparse.ArgumentParser(prog="n-puzzle")
@@ -118,7 +131,7 @@ def get_args() -> argparse.Namespace:
         type=check_random,
         metavar="N",
         default=3,
-        help="generate a random N puzzle",
+        help="generates a random N puzzle",
     )
     parser.add_argument(
         "-he",
@@ -126,7 +139,7 @@ def get_args() -> argparse.Namespace:
         type=check_heuristic,
         metavar="NAME",
         default=DEFAULT_HEURISTIC,
-        help="particular way of calculating the distance",
+        help="particular way of calculating the distances",
     )
     parser.add_argument(
         "-s",
@@ -141,14 +154,21 @@ def get_args() -> argparse.Namespace:
         "--unsolvable",
         action="store_true",
         default=False,
-        help="Forces generation of an unsolvable puzzle. Ignored when -f ",
+        help="forces generation of an unsolvable puzzle. Ignored when -f ",
     )
     parser.add_argument(
         "-k",
         "--kompare",
         action="store_true",
         default=False,
-        help="Display a nice plot to compare the different solvers",
+        help="display a nice plot to compare the different solvers",
+    )
+    parser.add_argument(
+        "-a",
+        "--all",
+        action="store_true",
+        default=False,
+        help="prints out a report for each type of solver/heuristic",
     )
 
     args = parser.parse_args()
