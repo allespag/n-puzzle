@@ -43,7 +43,7 @@ class Benchmark:
             [
                 [
                     report.time_complexity,
-                    report.max_size_complexity,
+                    report.size_complexity,
                     report.time_taken,
                     report.result,
                     report.time_complexity,

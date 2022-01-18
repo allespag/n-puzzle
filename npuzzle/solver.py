@@ -214,7 +214,7 @@ class IDAStar:
     def __add_to_path(self, node: Node) -> None:
         self.path.add(node)
 
-    @ReportManager.reset(["size_complexity"])
+    @ReportManager.reset(["current_size_complexity"])
     def __reset_path(self) -> None:
         self.path = set()
 
@@ -286,8 +286,8 @@ class JumpPointSearch:
 
 AVAILABLE_SOLVERS: list[Type[Solver]] = [
     AStar,
-    # BFS,
-    # DFS,
+    BFS,
+    DFS,
     IDAStar,
     GreedySearch,
 ]

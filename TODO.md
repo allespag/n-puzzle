@@ -268,4 +268,6 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 ## report.py
 
-* Peut être renommer `size_complexity` en `current_size_complexity` et `max_size_complexity` en `size_complexity`
+<!-- * Peut être renommer `size_complexity` en `current_size_complexity` et `max_size_complexity` en `size_complexity`
+
+**UPDATE**: C'est fait. -->

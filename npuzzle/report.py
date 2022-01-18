@@ -17,7 +17,7 @@ class Report:
     author: str
     time_complexity: int = 0
     size_complexity: int = 0
-    max_size_complexity: int = 0
+    current_size_complexity: int = 0
     start: int | None = None
     end: int | None = None
     result: Any | None = None
@@ -26,7 +26,7 @@ class Report:
         return f"""Report(
         Result: {self.result}
         Complexity in time: {self.time_complexity},
-        Complexity in size: {self.max_size_complexity},
+        Complexity in size: {self.size_complexity},
         In {self.time_taken * 1e-9:.2f}s,
         By {self.author},\n)"""
 
@@ -72,13 +72,13 @@ class ReportManager:
             @wraps(func)
             def wrapper(instance: Reportable, *args: Any, **kwargs: Any) -> T:
                 result = func(instance, *args, **kwargs)
-                instance.report.size_complexity += n
+                instance.report.current_size_complexity += n
                 if (
-                    instance.report.size_complexity
-                    > instance.report.max_size_complexity
+                    instance.report.current_size_complexity
+                    > instance.report.size_complexity
                 ):
-                    instance.report.max_size_complexity = (
-                        instance.report.size_complexity
+                    instance.report.size_complexity = (
+                        instance.report.current_size_complexity
                     )
                 return result
 
