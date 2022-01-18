@@ -1,5 +1,10 @@
 # n-puzzle
 
+## *.py
+
+* Docstrings ffs !
+
+
 ## npuzzle.py
 
 <!-- * Trouver une façon de vérifier l'égalité entre 2 Npuzzle. Une idée naive :
@@ -174,9 +179,11 @@ class Npuzzle:
 
 ## solver.py
 
-* Je ne suis pas sûr que l'implémentation des différents `Solver` doit être dans `solver.py`. Le *potentiel* problème c'est les `import` qui n'ont aucun sens pour tel ou tel `Solver`.
+<!-- * Je ne suis pas sûr que l'implémentation des différents `Solver` doit être dans `solver.py`. Le *potentiel* problème c'est les `import` qui n'ont aucun sens pour tel ou tel `Solver`.
 
 **UPDATE**: si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
+
+**UPDATE2**: Je close ça. Alors qu'il y a *pas mal* d'algo dans `solver.py`, je ne sens pas le besoin de ce point. -->
 
 <!-- * `Solver.__node_in_open` est très, très lent. Le `any` prend une éternité...
 
@@ -190,7 +197,11 @@ class Npuzzle:
 
 **UPDATE3**: `Greedy Search` fait. Il fonctionne bien pour `3x3`, `4x4`, `5x5`.
 
-* Ajouter un `uniform cost search`
+**UPDATE4**: `Dijkstra` fait.
+
+<!-- * Ajouter un `uniform cost search`
+
+**UPDATE**: J'ai ajouté `Dijkstra`. En gros, c'est la même chose que `A*` sans `h(x)`. C'est fait. -->
 
 <!-- * Attention, certains algo n'ont pas besoin d'heuristique (i.e `DFS` et `BFS` pour le moment). Il faut donc trouvé un moyen d'ignorer `args.heuristic` pour ces cas la.
 
@@ -233,9 +244,11 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 ## distance.py
 
-* Même chose que pour `solver.py`. Est-ce que l'implémentation des différentes `Distance` doit être dans `distance.py` ? Sachant que, *je pense* que leurs implémentation vont être plus simple.
+<!-- * Même chose que pour `solver.py`. Est-ce que l'implémentation des différentes `Distance` doit être dans `distance.py` ? Sachant que, *je pense* que leurs implémentation vont être plus simple.
 
 **UPDATE**: Même chose que pour `solver.py`. Si jamais je le fait ça va casser des trucs dans `__main__.py`. Une solution peut être de quand même le faire, et de jetter un oeil au `plugin pattern`.
+
+**UPDATE2**: Même chose que pour `solver.py`. Je ne pense pas que ça soit necessaire. -->
 
 * Ajouter des façons de calculer une distance. **Attention**, tu dois choisir des fonctions heuristiques dites "**admissible**" !
 
