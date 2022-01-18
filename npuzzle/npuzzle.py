@@ -4,12 +4,17 @@ import copy
 import random
 from enum import IntEnum, auto
 
-from npuzzle.utils import coor_in_list, coor_to_index, index_in_list, index_to_coor
+from npuzzle.utils import (
+    coor_in_list,
+    coor_to_index,
+    index_in_list,
+    index_to_coor,
+    snail_array,
+)
 
 EMPTY_TILE = 0
 MIN_N_VALUE = 3
 MAX_N_VALUE = 10
-GOALS_PATH = "states/goals"
 
 
 class Move(IntEnum):
@@ -140,11 +145,9 @@ class Npuzzle:
 
         return result
 
-    # note: I know this is not the right way to do things, for now it is what it is.
     @property
     def goal(self) -> Npuzzle:
-        filename = f"{GOALS_PATH}/goal_{self.n}.txt"
-        return Npuzzle.from_file(filename)
+        return Npuzzle(self.n, snail_array(self.n))
 
     # note: I know this is not the right way to do things, for now it is what it is.
     def make_move(self, move: Move) -> bool:

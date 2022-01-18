@@ -1,6 +1,14 @@
 from __future__ import annotations
 
+from enum import Enum, auto
 from typing import Any
+
+
+class Direction(Enum):
+    TOP = auto()
+    RIGHT = auto()
+    BOTTOM = auto()
+    LEFT = auto()
 
 
 def index_in_list(index: int, list: list[Any]) -> bool:
@@ -27,6 +35,44 @@ def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
     return y * width + x
 
 
-# TODO
 def snail_array(n: int) -> list[int]:
-    return [ord(c) for c in "TODO"]
+
+    top_index = 0
+    right_index = n - 1
+    bottom_index = n - 1
+    left_index = 0
+
+    result = [0] * (n * n)
+    curr = 1
+    dir = Direction.RIGHT
+
+    while curr <= n * n - 1:
+        if dir == Direction.RIGHT:
+            # left -> right
+            for i in range(left_index, right_index + 1):
+                result[top_index * n + i] = curr
+                curr += 1
+            top_index += 1
+            dir = Direction.BOTTOM
+        elif dir == Direction.BOTTOM:
+            # top -> bottom
+            for i in range(top_index, bottom_index + 1):
+                result[right_index + (n * i)] = curr
+                curr += 1
+            right_index -= 1
+            dir = Direction.LEFT
+        elif dir == Direction.LEFT:
+            # right -> left
+            for i in range(right_index, left_index - 1, -1):
+                result[bottom_index * n + i] = curr
+                curr += 1
+            bottom_index -= 1
+            dir = Direction.TOP
+        elif dir == Direction.TOP:
+            # bottom -> top
+            for i in range(bottom_index, top_index - 1, -1):
+                result[left_index + (n * i)] = curr
+                curr += 1
+            left_index += 1
+            dir = Direction.RIGHT
+    return result

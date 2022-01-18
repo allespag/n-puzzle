@@ -139,7 +139,7 @@ class Npuzzle:
 
 * Tester `Npuzzle.from_file`. Il y a quelques tests dans `resources/puzzles/tests` mais je manque peut être des choses.
 
-* Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
+<!-- * Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
 
 **UPDATE**: Je pense que ce n'est pas nécessaire de créer un algo pour ça. En temps normal, oui, mais dans mon cas (i.e. manque de temps), je ne pense pas que ça soit très pertinent. L'idée que j'ai atm c'est créer N fichier(s) pour décrire les N puzzle solution. Exemple:
 
@@ -152,13 +152,15 @@ class Npuzzle:
 7 6 5
 ```
 
-**UPDATE2**: `goal_3.txt`, `goal_4.txt`, `goal_5.txt` fait.
+**UPDATE2**: `goal_3.txt`, `goal_4.txt`, `goal_5.txt`, `goal_6.txt` fait.
 
 **UPDATE3**: si le `path` vers mes goals est changé, j'ai un crash. Peut être verifier quelque part que le `path` fait sens.
 
+**UPDATE4**: J'ai créer l'algo finalement. C'est fait. -->
+
 * Creer une methode pour verifier si une `Npuzzle` est solvable ou non
 
-**UPDATE**: Je n'ai pas compris comme ça fonctionne
+**UPDATE**: Je n'ai pas compris comment ça fonctionne
 
 **UPDATE2**: C'est fait, **MAIS** besoin d'être testé !
 
