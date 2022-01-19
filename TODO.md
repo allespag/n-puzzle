@@ -278,6 +278,12 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 * Pour le flag `--kompare`, peut être ajouter une cfg pour comparer les des `solvers` (ou des `distances`) en particulier
 
+**UPDATE**: Du coup, j'ai créer un flag `--config`. Il devrait être xor avec `--all`
+
+**UPDATE2**: `--all` n'existe plus, il a été remplacé par `--report`, pour simplement print les différents `Report`.
+
+**UPDATE3**: C'est fait, **MAIS** la logique derrière `--config` est assez particulière, c'est pas impossible qu'il y ai des soucis part endroits.
+
 <!-- * Peut être avoir un flag qui *log* le puzzle
 
 **UPDATE**: C'est fait. -->

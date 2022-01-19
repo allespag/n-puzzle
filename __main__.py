@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import argparse
-import configparser
+import json
 
 __CHECK_PERF = False
 if __CHECK_PERF:
@@ -33,11 +35,12 @@ def main(args: argparse.Namespace) -> None:
         return
 
     # compare if necessary and leave
-    if args.all or args.kompare:
-        benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
+    if args.report or args.kompare:
+        # benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
+        benchmark = Benchmark(args.config["solvers"], args.config["heuristics"])
         reports = benchmark.run(puzzle, puzzle.goal)
 
-        if args.all:
+        if args.report:
             for report in reports:
                 print(report)
         if args.kompare:
@@ -80,16 +83,6 @@ def main(args: argparse.Namespace) -> None:
             print(f"Error: {args.output} already exists.")
 
 
-# TODO
-def get_config(path: str):
-    """..."""
-
-    cfg = configparser.ConfigParser()
-    cfg.read(path)
-
-    return cfg
-
-
 def get_args() -> argparse.Namespace:
     """Get the arguments from command line."""
 
@@ -123,6 +116,38 @@ def get_args() -> argparse.Namespace:
             f"The value of 'solver' must be in {([solver.__name__ for solver in AVAILABLE_SOLVERS])}. ({value!r} here)"
         )
 
+    def check_cfg(value: str) -> dict[str, list[Type[Solver]] | list[Type[Distance]]]:
+        """Chech the value of the config."""
+
+        try:
+            with open(value) as f:
+                cfg = json.load(f)
+        except Exception:
+            raise argparse.ArgumentTypeError(
+                f"Something bad happened while trying to load data from {value}"
+            )
+
+        if "solvers" not in cfg or "heuristics" not in cfg:
+            raise argparse.ArgumentTypeError(
+                "'solvers' AND 'heuristics' should be part of your config"
+            )
+
+        solvers = [
+            solver for solver in AVAILABLE_SOLVERS if solver.__name__ in cfg["solvers"]
+        ]
+        heuristics = [
+            heuristic
+            for heuristic in AVAILABLE_HEURISTICS
+            if heuristic.__name__ in cfg["heuristics"]
+        ]
+
+        if not solvers or not heuristics:
+            raise argparse.ArgumentTypeError(
+                f"You must provide some solvers/heuristics. ({solvers=} and {heuristics=} here)"
+            )
+
+        return {"solvers": solvers, "heuristics": heuristics}
+
     parser = argparse.ArgumentParser(prog="n-puzzle")
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -133,7 +158,7 @@ def get_args() -> argparse.Namespace:
         help="n-puzzle to load",
     )
     group.add_argument(
-        "-r",
+        "-R",
         "--random",
         type=check_random,
         metavar="N",
@@ -171,8 +196,8 @@ def get_args() -> argparse.Namespace:
         help="display a nice plot to compare the different solvers",
     )
     parser.add_argument(
-        "-a",
-        "--all",
+        "-r",
+        "--report",
         action="store_true",
         default=False,
         help="prints out a report for each type of solver/heuristic",
@@ -184,6 +209,14 @@ def get_args() -> argparse.Namespace:
         metavar="FILENAME",
         default=None,
         help="output the puzzle to a file",
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=check_cfg,
+        metavar="FILENAME",
+        default={"solvers": AVAILABLE_SOLVERS, "heuristics": AVAILABLE_HEURISTICS},
+        help="config to load",
     )
 
     args = parser.parse_args()
