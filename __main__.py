@@ -72,6 +72,13 @@ def main(args: argparse.Namespace) -> None:
         finally:
             print(solver.report)
 
+    # write the puzzle to a file if necessary
+    if not args.output is None:
+        if puzzle.to_file(args.output):
+            print(f"The puzzle has been saved in {args.output}.")
+        else:
+            print(f"Error: {args.output} already exists.")
+
 
 # TODO
 def get_config(path: str):
@@ -169,6 +176,14 @@ def get_args() -> argparse.Namespace:
         action="store_true",
         default=False,
         help="prints out a report for each type of solver/heuristic",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        metavar="FILENAME",
+        default=None,
+        help="output the puzzle to a file",
     )
 
     args = parser.parse_args()
