@@ -1,0 +1,14 @@
+{
+    "solvers": [
+        "AStar",
+        "Dijkstra",
+        "GreedySearch",
+        "IDAStar",
+        "BFS",
+        "DFS"
+    ],
+    "heuristics": [
+        "Manhattan",
+        "TilesOutOfPlace"
+    ]
+}

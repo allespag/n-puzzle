@@ -1,0 +1,8 @@
+{
+	"solvers": [
+		"AStar",
+		"IDAStar",
+		"GreedySearch"
+	],
+	"heuristics": []
+}
