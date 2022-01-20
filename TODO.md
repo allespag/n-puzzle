@@ -198,6 +198,8 @@ class Npuzzle:
 
 **UPDATE4**: `Dijkstra` fait.
 
+**UPDATE5**: `IDA*` refait. Il marche davantage
+
 <!-- * Ajouter un `uniform cost search`
 
 **UPDATE**: J'ai ajouté `Dijkstra`. En gros, c'est la même chose que `A*` sans `h(x)`. C'est fait. -->

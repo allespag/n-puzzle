@@ -1,0 +1,9 @@
+{
+    "solvers": [
+        "AStar",
+        "IDAStar"
+    ],
+    "heuristics": [
+        "Manhattan"
+    ]
+}

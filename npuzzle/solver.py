@@ -23,7 +23,9 @@ class AStar:
         self.__open_hash: set[Node] = set()
         self.close: set[Node] = set()
         self.distance: Distance = distance
-        self.report: Report = Report(f"AStar with {type(self.distance).__name__}")
+        self.report: Report = Report(
+            author=f"AStar with {type(self.distance).__name__}"
+        )
 
     @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
@@ -82,7 +84,7 @@ class Dijkstra:
         self.open: PriorityQueue[Node] = PriorityQueue()
         self.__open_hash: set[Node] = set()
         self.close: set[Node] = set()
-        self.report: Report = Report(f"Dijkstra")
+        self.report: Report = Report(author="Dijkstra")
 
     @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
@@ -141,7 +143,7 @@ class GreedySearch:
         self.close: set[Node] = set()
         self.distance: Distance = distance
         self.report: Report = Report(
-            f"GreedySearch with {type(self.distance).__name__}"
+            author=f"GreedySearch with {type(self.distance).__name__}"
         )
 
     @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
@@ -267,24 +269,22 @@ class DFS:
         self.visited.add(node)
 
 
-# Not finished, results are weird
 class IDAStar:
     def __init__(self, distance: Distance) -> None:
-        self.path: set[Node] = set()
+        self.path: LifoQueue[Node] = LifoQueue()
         self.distance: Distance = distance
-        self.report: Report = Report(f"IDAStar with {type(self.distance).__name__}")
+        self.report: Report = Report(
+            author=f"IDAStar with {type(self.distance).__name__}"
+        )
 
     @ReportManager.count
-    def __search(
-        self, node: Node, g: int, threshold: int, goal: Npuzzle
-    ) -> Node | int | float:
+    def __search(self, goal: Npuzzle, g: int, bound: int) -> Node | int | None:
+        node = self.path.queue[-1]
         node.g = g
         node.h = self.distance.compute(node.state, goal)
         node.f = node.g + node.h
 
-        self.__add_to_path(node)
-
-        if node.f > threshold:
+        if node.f > bound:
             return node.f
         if node.state == goal:
             return node
@@ -295,47 +295,49 @@ class IDAStar:
             if not self.__node_in_path(successor):
                 successor.parent = node
                 self.__add_to_path(successor)
-                temp = self.__search(successor, node.g + COST, threshold, goal)
-                if isinstance(temp, Node):
-                    return temp
-                if temp < min_:
-                    min_ = temp
 
-        return min_
+                t = self.__search(goal, node.g + COST, bound)
+                if isinstance(t, Node):
+                    return t
+                if isinstance(t, (int, float)) and t < min_:
+                    min_ = t
+                self.__remove_from_path()
+        if min_ == float("+inf"):
+            return None
+        else:
+            return min_  # type: ignore
 
     @ReportManager.as_result(Node.get_genealogy_size, if_failed=False)
     @ReportManager.time
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         root = Node(start)
-        threshold = self.distance.compute(root.state, goal)
+        bound = self.distance.compute(root.state, goal)
+        self.__add_to_path(root)
 
         while True:
-            self.__reset_path()
-            self.__add_to_path(root)
-            temp = self.__search(root, 0, threshold, goal)
-            if isinstance(temp, Node):
-                return temp
-            if temp == float("+inf"):
-                return None
-            threshold = temp
+            t = self.__search(goal, 0, bound)
+            if isinstance(t, Node) or t is None:
+                return t
+            else:
+                bound = t
 
     @ReportManager.balance(1)
     def __add_to_path(self, node: Node) -> None:
-        self.path.add(node)
+        self.path.put(node)
 
-    @ReportManager.reset(["current_size_complexity"])
-    def __reset_path(self) -> None:
-        self.path = set()
+    @ReportManager.balance(-1)
+    def __remove_from_path(self) -> Node:
+        return self.path.get()
 
     def __node_in_path(self, node: Node) -> bool:
-        return node in self.path
+        return any(n.state == node.state for n in self.path.queue)
 
 
 # TODO
 class JumpPointSearch:
     def __init__(self, distance: Distance) -> None:
         self.distance: Distance = distance
-        self.report: Report = Report("TODO")
+        self.report: Report = Report(author="TODO")
 
     def run(self, start: Npuzzle, goal: Npuzzle) -> Node | None:
         raise NotImplementedError
