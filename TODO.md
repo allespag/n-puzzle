@@ -200,6 +200,8 @@ class Npuzzle:
 
 **UPDATE5**: `IDA*` refait. Il marche davantage
 
+* J'ai un soucis avec `A*`, je pense qu'il faut suivre l'algo de l'école.
+
 <!-- * Ajouter un `uniform cost search`
 
 **UPDATE**: J'ai ajouté `Dijkstra`. En gros, c'est la même chose que `A*` sans `h(x)`. C'est fait. -->
@@ -254,6 +256,8 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 * Ajouter des façons de calculer une distance. **Attention**, tu dois choisir des fonctions heuristiques dites "**admissible**" !
 
 * Regarde `linear conflict`
+
+**UPDATE**: ça me saoul, mais ça avance
 
 ## main.py
 
