@@ -8,10 +8,14 @@ COST = 1
 class Node:
     def __init__(self, state: Npuzzle) -> None:
         self.state = state
-        self.f = 0  # total cost of the node
+        # self.f = 0  # total cost of the node
         self.g = 0  # distance between the current node and the start node
         self.h = 0  # estimated distance from the current node to the end node
         self.parent: Node | None = None
+
+    @property
+    def f(self) -> int:
+        return self.g + self.h
 
     def __repr__(self) -> str:
         return f"Node({self.state!r}, f={self.f}, g={self.g}, h={self.h}, {self.parent}, @{hex(id(self))})"

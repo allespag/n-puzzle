@@ -48,10 +48,13 @@ class AStar:
                 if self.__node_in_open(successor):
                     if g < successor.g:
                         successor.g = g
+                        successor.parent = current.parent
+                        # successor.f = successor.g + successor.h
+                        ## weird stuff here
                 else:
                     successor.g = g
                     successor.h = self.distance.compute(successor.state, goal)
-                    successor.f = successor.g + successor.h
+                    # successor.f = successor.g + successor.h
                     successor.parent = current
                     self.__add_to_open(successor)
         return None
@@ -109,7 +112,7 @@ class Dijkstra:
                         successor.g = g
                 else:
                     successor.g = g
-                    successor.f = successor.g + successor.h
+                    # successor.f = successor.g + successor.h
                     successor.parent = current
                     self.__add_to_open(successor)
         return None
@@ -165,7 +168,7 @@ class GreedySearch:
                     continue
                 else:
                     successor.h = self.distance.compute(successor.state, goal)
-                    successor.f = successor.h
+                    # successor.f = successor.h
                     successor.parent = current
                     self.__add_to_open(successor)
         return None
@@ -282,7 +285,7 @@ class IDAStar:
         node = self.path.queue[-1]
         node.g = g
         node.h = self.distance.compute(node.state, goal)
-        node.f = node.g + node.h
+        # node.f = node.g + node.h
 
         if node.f > bound:
             return node.f
