@@ -226,13 +226,5 @@ def get_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
-    from npuzzle.distance import LinearConflict
-
-    # puzzle = Npuzzle.from_random(3, solvable=True)
-    # goal = puzzle.goal
-    # print(puzzle)
-    # d = LinearConflict().compute(puzzle, goal)
-    # print(d)
-
     args = get_args()
     main(args)
