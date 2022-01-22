@@ -45,6 +45,8 @@ def main(args: argparse.Namespace) -> None:
                 print(report)
         if args.kompare:
             benchmark.display(reports)
+        if puzzle.to_file(args.output):
+            print(f"The puzzle has been saved in {args.output}.")
         return
 
     # create the solver with its heuristic if necessary
@@ -224,5 +226,13 @@ def get_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    from npuzzle.distance import LinearConflict
+
+    # puzzle = Npuzzle.from_random(3, solvable=True)
+    # goal = puzzle.goal
+    # print(puzzle)
+    # d = LinearConflict().compute(puzzle, goal)
+    # print(d)
+
     args = get_args()
     main(args)
