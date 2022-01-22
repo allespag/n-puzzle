@@ -42,7 +42,7 @@ class Node:
     def get_genealogy_size(self) -> int | float:
         try:
             if self.parent is None:
-                return 1
+                return 0
             else:
                 return self.parent.get_genealogy_size() + 1
         except RecursionError:
