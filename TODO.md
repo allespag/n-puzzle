@@ -188,7 +188,7 @@ class Npuzzle:
 
 **UPDATE**: J'ai ajouté un `Solver.__open_hash` pour supprimé le `any`. Les perfs pour le 3x3 sont turbo cool. *Cependant*, le 4*4 est pas ouf. Je pense que `A*` n'est pas adapté. -->
 
-* Ajouter des algos
+<!-- * Ajouter des algos
 
 **UPDATE**: `BFS`, `DFS` fait.
 
@@ -200,7 +200,13 @@ class Npuzzle:
 
 **UPDATE5**: `IDA*` refait. Il marche davantage
 
-* J'ai un soucis avec `A*`, je pense qu'il faut suivre l'algo de l'école.
+**UPDATE6**: J'abandonne le `Jump Point Search` par manque de temps/doc. -->
+
+* Ajouter `Bidirectional Search`
+
+<!-- * J'ai un soucis avec `A*`, je pense qu'il faut suivre l'algo de l'école.
+
+**UPDATE**: Après avoir testé l'algo de l'école, je ne vois aucune différence entre les résultats. Je close. -->
 
 <!-- * Ajouter un `uniform cost search`
 
@@ -289,6 +295,8 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 **UPDATE2**: `--all` n'existe plus, il a été remplacé par `--report`, pour simplement print les différents `Report`.
 
 **UPDATE3**: C'est fait, **MAIS** la logique derrière `--config` est assez particulière, c'est pas impossible qu'il y ai des soucis part endroits.
+
+* Peut être créer un flag pour faire des *statistiques*
 
 <!-- * Peut être avoir un flag qui *log* le puzzle
 
