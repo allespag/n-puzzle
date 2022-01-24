@@ -13,7 +13,8 @@ from typing import Type
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver, is_informed
+from npuzzle.solver import (AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver,
+                            is_informed)
 
 
 def main(args: argparse.Namespace) -> None:
@@ -45,7 +46,7 @@ def main(args: argparse.Namespace) -> None:
                 print(report)
         if args.kompare:
             benchmark.display(reports)
-        if puzzle.to_file(args.output):
+        if not (args.output is None) and puzzle.to_file(args.output):
             print(f"The puzzle has been saved in {args.output}.")
         return
 
@@ -78,7 +79,7 @@ def main(args: argparse.Namespace) -> None:
             print(solver.report)
 
     # write the puzzle to a file if necessary
-    if not args.output is None:
+    if not (args.output is None):
         if puzzle.to_file(args.output):
             print(f"The puzzle has been saved in {args.output}.")
         else:
