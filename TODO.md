@@ -298,6 +298,8 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 * Peut être créer un flag pour faire des *statistiques*
 
+**UPDATE**: ca fonctionne, mais revoir comment s'est ecrit.
+
 <!-- * Peut être avoir un flag qui *log* le puzzle
 
 **UPDATE**: C'est fait. -->

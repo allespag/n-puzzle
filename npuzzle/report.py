@@ -35,6 +35,10 @@ class Report:
         return time.perf_counter_ns()
 
     @property
+    def time_taken_in_s(self) -> float:
+        return self.time_taken * 1e-9
+
+    @property
     def time_taken(self) -> float:
         if not self.start is None and self.end is None:
             return Report.current_time() - self.start

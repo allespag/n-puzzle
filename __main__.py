@@ -13,8 +13,7 @@ from typing import Type
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import (AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver,
-                            is_informed)
+from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver, is_informed
 
 
 def main(args: argparse.Namespace) -> None:
@@ -36,18 +35,23 @@ def main(args: argparse.Namespace) -> None:
         return
 
     # compare if necessary and leave
-    if args.report or args.kompare:
-        # benchmark = Benchmark(AVAILABLE_SOLVERS, AVAILABLE_HEURISTICS)
+    if args.report or args.kompare or args.csv:
         benchmark = Benchmark(args.config["solvers"], args.config["heuristics"])
         reports = benchmark.run(puzzle, puzzle.goal)
 
         if args.report:
             for report in reports:
                 print(report)
+        if args.csv:
+            for elem in benchmark.compute_statistics(iter=args.csv):
+                author, df = elem
+                Benchmark.to_csv(df, author)
+                Benchmark.describe(df, author)
         if args.kompare:
             benchmark.display(reports)
         if not (args.output is None) and puzzle.to_file(args.output):
             print(f"The puzzle has been saved in {args.output}.")
+
         return
 
     # create the solver with its heuristic if necessary
@@ -220,6 +224,13 @@ def get_args() -> argparse.Namespace:
         metavar="FILENAME",
         default={"solvers": AVAILABLE_SOLVERS, "heuristics": AVAILABLE_HEURISTICS},
         help="config to load",
+    )
+    parser.add_argument(
+        "--csv",
+        type=int,
+        metavar="ITER",
+        default=None,
+        help="TODO",
     )
 
     args = parser.parse_args()
