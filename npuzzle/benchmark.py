@@ -114,7 +114,7 @@ class Benchmark:
         ]
 
     @staticmethod
-    def to_csv(df: pd.DataFrame, author: str):
+    def to_csv(df: pd.DataFrame, author: str) -> None:
         if not os.path.exists(STATS_DIRECTORY):
             os.makedirs(STATS_DIRECTORY)
 
@@ -123,5 +123,5 @@ class Benchmark:
         )
 
     @staticmethod
-    def describe(df: pd.DataFrame, author: str):
+    def describe(df: pd.DataFrame, author: str) -> None:
         print(f"By {author}:\n{df.describe()}")
