@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 
 __CHECK_PERF = False
 if __CHECK_PERF:
@@ -13,7 +14,8 @@ from typing import Type
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver, is_informed
+from npuzzle.solver import (AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver,
+                            is_informed)
 
 
 def main(args: argparse.Namespace) -> None:
@@ -34,19 +36,22 @@ def main(args: argparse.Namespace) -> None:
         print(f"This puzzle can't be solved.\n{puzzle}")
         return
 
-    # compare if necessary and leave
+    # benchmark if necessary and leave
     if args.report or args.kompare or args.csv:
         benchmark = Benchmark(args.config["solvers"], args.config["heuristics"])
-        reports = benchmark.run(puzzle, puzzle.goal)
 
-        if args.report:
-            for report in reports:
-                print(report)
         if args.csv:
             for elem in benchmark.compute_statistics(iter=args.csv):
                 author, df = elem
                 Benchmark.to_csv(df, author)
-                Benchmark.describe(df, author)
+                if args.describe:
+                    Benchmark.describe(df, author)
+            return
+
+        reports = benchmark.run(puzzle, puzzle.goal)
+        if args.report:
+            for report in reports:
+                print(report)
         if args.kompare:
             benchmark.display(reports)
         if not (args.output is None) and puzzle.to_file(args.output):
@@ -158,7 +163,7 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="n-puzzle")
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
-        "-f",
+        "-F",
         "--file",
         type=str,
         metavar="FILENAME",
@@ -173,7 +178,7 @@ def get_args() -> argparse.Namespace:
         help="generates a random N puzzle",
     )
     parser.add_argument(
-        "-he",
+        "-H",
         "--heuristic",
         type=check_heuristic,
         metavar="NAME",
@@ -181,7 +186,7 @@ def get_args() -> argparse.Namespace:
         help=f"particular way of calculating the distances. {[heuristic.__name__ for heuristic in AVAILABLE_HEURISTICS]}",
     )
     parser.add_argument(
-        "-s",
+        "-S",
         "--solver",
         type=check_solver,
         metavar="NAME",
@@ -189,25 +194,25 @@ def get_args() -> argparse.Namespace:
         help=f"algorithm to use. {[solver.__name__ for solver in AVAILABLE_SOLVERS]}",
     )
     parser.add_argument(
-        "-u",
+        "-U",
         "--unsolvable",
         action="store_true",
         default=False,
-        help="forces generation of an unsolvable puzzle. Ignored when -f ",
+        help="forces generation of an unsolvable puzzle. Ignored when -f",
     )
     parser.add_argument(
         "-k",
         "--kompare",
         action="store_true",
         default=False,
-        help="display a nice plot to compare the different solvers",
+        help="display a nice plot to compare the different solvers (with a config)",
     )
     parser.add_argument(
         "-r",
         "--report",
         action="store_true",
         default=False,
-        help="prints out a report for each type of solver/heuristic",
+        help="prints out a report for each type of solver/heuristic (with a config)",
     )
     parser.add_argument(
         "-o",
@@ -230,7 +235,14 @@ def get_args() -> argparse.Namespace:
         type=int,
         metavar="ITER",
         default=None,
-        help="TODO",
+        help="perform some tests with ITER puzzles (with a config)",
+    )
+    parser.add_argument(
+        "-d",
+        "--describe",
+        action="store_true",
+        default=False,
+        help="when --csv, describe each csv",
     )
 
     args = parser.parse_args()
@@ -238,5 +250,6 @@ def get_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    random.seed(42)  # TODO: delete
     args = get_args()
     main(args)
