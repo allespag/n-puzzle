@@ -1,0 +1,10 @@
+{
+    "solvers": [
+        "Dijkstra"
+    ],
+    "heuristics": [
+        "Manhattan",
+        "TilesOutOfPlace",
+        "LinearConflict"
+    ]
+}

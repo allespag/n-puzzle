@@ -1,0 +1,10 @@
+{
+    "solvers": [
+        "IDAStar"
+    ],
+    "heuristics": [
+        "Manhattan",
+        "TilesOutOfPlace",
+        "LinearConflict"
+    ]
+}

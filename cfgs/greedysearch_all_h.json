@@ -1,0 +1,10 @@
+{
+    "solvers": [
+        "GreedySearch"
+    ],
+    "heuristics": [
+        "Manhattan",
+        "TilesOutOfPlace",
+        "LinearConflict"
+    ]
+}

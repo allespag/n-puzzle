@@ -1,0 +1,8 @@
+{
+    "solvers": [
+        "DFS"
+    ],
+    "heuristics": [
+        "Manhattan"
+    ]
+}

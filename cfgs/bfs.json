@@ -1,7 +1,6 @@
 {
     "solvers": [
-        "AStar",
-        "IDAStar"
+        "DFS"
     ],
     "heuristics": [
         "Manhattan"
