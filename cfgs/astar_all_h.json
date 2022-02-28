@@ -5,6 +5,6 @@
     "heuristics": [
         "Manhattan",
         "TilesOutOfPlace",
-        "LinearConflict"
+    	"TilesOutOfRowCol"	
     ]
 }

@@ -30,6 +30,28 @@ class TilesOutOfPlace:
         return sum(a != b for a, b in zip(src.tiles, dst.tiles))
 
 
+class TilesOutOfRowCol:
+    def compute(self, src: Npuzzle, dst: Npuzzle) -> int:
+        src_rows: list[list[int]] = []
+        dst_rows: list[list[int]] = []
+        src_cols: list[list[int]] = []
+        dst_cols: list[list[int]] = []
+        for i in range(src.n):
+            src_rows.append(src.tiles[i * src.n : (i + 1) * src.n])
+            src_cols.append(src.tiles[i :: src.n])
+            dst_rows.append(dst.tiles[i * src.n : (i + 1) * src.n])
+            dst_cols.append(dst.tiles[i :: src.n])
+
+        distance = 0
+        for src_row, dst_row in zip(src_rows, dst_rows):
+            distance += sum(tile not in dst_row for tile in src_row)
+        for src_col, dst_col in zip(src_cols, dst_cols):
+            distance += sum(tile not in dst_col for tile in src_col)
+
+        return distance
+
+
+# TODO
 class LinearConflict:
     def __count_conflict(self, src_row: list[int], dst_row: list[int]) -> int:
         conflict = 0
@@ -68,7 +90,7 @@ class LinearConflict:
 AVAILABLE_HEURISTICS: list[Type[Distance]] = [
     Manhattan,
     TilesOutOfPlace,
-    LinearConflict,
+    TilesOutOfRowCol,
 ]
 
 DEFAULT_HEURISTIC: Type[Distance] = Manhattan

@@ -141,7 +141,9 @@ class Npuzzle:
 
 **UPDATE**: C'est fait. -->
 
-* Tester `Npuzzle.from_file`. Il y a quelques tests dans `resources/puzzles/tests` mais je manque peut être des choses.
+<!-- * Tester `Npuzzle.from_file`. Il y a quelques tests dans `resources/puzzles/tests` mais je manque peut être des choses.
+
+**UPDATE**: Je close. -->
 
 <!-- * Je suis un idiot: le `goal` n'est pas un array organisé genre : `[0, 1, 2, 3, 4, 5, 6, 7, 8]` (pour `n = 3`) mais un *escargot* (i.e `[1, 2, 3, 8, 0, 4, 7, 6, 5`). Du coup, `Npuzzle.goal` doit generer un array type *escargot*.
 
@@ -162,7 +164,7 @@ class Npuzzle:
 
 **UPDATE4**: J'ai créer l'algo finalement. C'est fait. -->
 
-* Creer une methode pour verifier si une `Npuzzle` est solvable ou non
+<!-- * Creer une methode pour verifier si une `Npuzzle` est solvable ou non
 
 **UPDATE**: Je n'ai pas compris comment ça fonctionne
 
@@ -171,6 +173,8 @@ class Npuzzle:
 **UPDATE3**: Ne fonctionne pas dans certains cas. En gros, ça marche pas.
 
 **UPDATE4**: C'est *re*fait mais, **MAIS** besoin d'être *encore* testé.
+
+**UPDATE5**: ça m'a pas laché. Je close. -->
 
 <!-- * Dans `Npuzzle.from_random`, j'ai ajouté un flag `solvable`. Si il est vrai, alors le puzzle que je retourne **doit** être solvable et inversement.
 
@@ -202,7 +206,9 @@ class Npuzzle:
 
 **UPDATE6**: J'abandonne le `Jump Point Search` par manque de temps/doc. -->
 
-* Ajouter `Bidirectional Search`
+<!-- * Ajouter `Bidirectional Search`
+
+**UPDATE**: J'abandonne pour le moment ce bonus -->
 
 <!-- * J'ai un soucis avec `A*`, je pense qu'il faut suivre l'algo de l'école.
 
@@ -259,11 +265,15 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 **UPDATE2**: Même chose que pour `solver.py`. Je ne pense pas que ça soit necessaire. -->
 
-* Ajouter des façons de calculer une distance. **Attention**, tu dois choisir des fonctions heuristiques dites "**admissible**" !
+<!-- * Ajouter des façons de calculer une distance. **Attention**, tu dois choisir des fonctions heuristiques dites "**admissible**" !
 
-* Regarde `linear conflict`
+**UPDATE**: `Manhattan`, `TilesOutOfPlace` & `TilesOutOfRowCol`. Je close. -->
+
+<!-- * Regarde `linear conflict`
 
 **UPDATE**: ça me saoul, mais ça avance
+
+**UPDATE2**: J'abandonne, j'ai créer `TilesOutOfRowCol` à la place. Je close. -->
 
 ## main.py
 
