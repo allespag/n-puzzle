@@ -14,8 +14,7 @@ from typing import Type
 from npuzzle.benchmark import Benchmark
 from npuzzle.distance import AVAILABLE_HEURISTICS, DEFAULT_HEURISTIC, Distance
 from npuzzle.npuzzle import MAX_N_VALUE, MIN_N_VALUE, Npuzzle
-from npuzzle.solver import (AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver,
-                            is_informed)
+from npuzzle.solver import AVAILABLE_SOLVERS, DEFAULT_SOLVER, Solver, is_informed
 
 
 def main(args: argparse.Namespace) -> None:
@@ -250,6 +249,5 @@ def get_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
-    random.seed(42)  # TODO: delete
     args = get_args()
     main(args)
