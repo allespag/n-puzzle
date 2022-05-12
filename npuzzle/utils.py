@@ -36,7 +36,6 @@ def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
 
 
 def snail_array(n: int) -> list[int]:
-
     top_index = 0
     right_index = n - 1
     bottom_index = n - 1
