@@ -2,7 +2,9 @@
 
 ## *.py
 
-* Docstrings ffs !
+<!-- * Docstrings ffs !
+
+**UPDATE**: je pense pas le faire, c'était une erreur d'attendre pour le faire -->
 
 ## npuzzle.py
 
@@ -43,7 +45,6 @@ Le problème sur cette implémentation c'est que `0` dans `self.titles` peut êt
 def index_in_list(index: int, list: list[Any]) -> bool:
     return 0 <= index < len(list)
 
-
 def coor_in_list(coor: tuple[int, int], shape: tuple[int, int]) -> bool:
     max_x, max_y = shape
     x, y = coor
@@ -54,7 +55,6 @@ def index_to_coor(index: int, shape: tuple[int, int]) -> tuple[int, int]:
     width, _ = shape
 
     return (index % width, index // width)
-
 
 def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
     x, y = coor
@@ -75,7 +75,6 @@ def index_to_coor(index: int, shape: tuple[int, int]) -> tuple[int, int]:
     width, _ = shape
 
     return (index % width, index // width)
-
 
 def coor_to_index(coor: tuple[int, int], shape: tuple[int, int]) -> int:
     x, y = coor
@@ -316,7 +315,9 @@ Ce n'est peut être pas la goat solution mais je close ce todo. C'est fait. -->
 
 ## README.md
 
-* Faire un truc stylé parce que les .md c'est cool
+<!-- * Faire un truc stylé parce que les .md c'est cool
+
+**UPDATE**: Toujours aussi cool les .md, c'est fait. -->
 
 ## report.py
 
