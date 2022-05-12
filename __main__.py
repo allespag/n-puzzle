@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import random
 
 __CHECK_PERF = False
 if __CHECK_PERF:
