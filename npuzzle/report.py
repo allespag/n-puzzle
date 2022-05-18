@@ -27,7 +27,7 @@ class Report:
         Result: {self.result}
         Complexity in time: {self.time_complexity},
         Complexity in size: {self.size_complexity},
-        In {self.time_taken * 1e-9:.2f}s,
+        In {self.time_taken_in_s:.2f}s,
         By {self.author},\n)"""
 
     @staticmethod
