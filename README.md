@@ -2,7 +2,7 @@
 allespag, 2022
 -->
 
-# n-puzzle
+# n-puzzle (42 project)
 
 The goal of this project is to solve the N-puzzle ("taquin" in French) game using the A* search algorithm or one of its variants.
 
